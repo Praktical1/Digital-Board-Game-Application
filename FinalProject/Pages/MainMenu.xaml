@@ -1,0 +1,105 @@
+﻿<Page x:Class="FinalProject.Pages.MainMenu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FinalProject.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="MainMenu">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
+            <RowDefinition Height="50px"/>
+        </Grid.RowDefinitions>
+        
+        <!--Responsible for glow animation on menu options-->
+        <Grid.Resources>
+            <Style x:Key="TextBoxGlow" TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="0"
+                                   To="1" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="1"
+                                   To="0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+
+        </Grid.Resources>
+
+        <!--Title-->
+        <Image Source="../Images/Title.png" />
+        
+        <!--Menu-->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnSolo" FontSize="60" HorizontalAlignment="Center">
+                    <TextBlock Text="Solo">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnMultiplayer" FontSize="60" HorizontalAlignment="Center">
+                    <TextBlock Text="Multiplayer">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnSettings" FontSize="60" HorizontalAlignment="Center">
+                    <TextBlock Text="Settings">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnExit" FontSize="60" HorizontalAlignment="Center">
+                    <TextBlock Text="Exit">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</Page>
