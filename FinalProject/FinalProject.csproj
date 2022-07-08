@@ -10,16 +10,43 @@
 
   <ItemGroup>
     <None Remove="Images\Background.png" />
+    <None Remove="Images\ChessPieces\Black_Bishop.png" />
+    <None Remove="Images\ChessPieces\Black_King.png" />
+    <None Remove="Images\ChessPieces\Black_Knight.png" />
+    <None Remove="Images\ChessPieces\Black_Pawn.png" />
+    <None Remove="Images\ChessPieces\Black_Queen.png" />
+    <None Remove="Images\ChessPieces\Black_Rook.png" />
+    <None Remove="Images\ChessPieces\White_Bishop.png" />
+    <None Remove="Images\ChessPieces\White_King.png" />
+    <None Remove="Images\ChessPieces\White_Knight.png" />
+    <None Remove="Images\ChessPieces\White_Pawn.png" />
+    <None Remove="Images\ChessPieces\White_Queen.png" />
+    <None Remove="Images\ChessPieces\White_Rook.png" />
+    <None Remove="Images\CoolBackground.png" />
     <None Remove="Images\Title.png" />
     <None Remove="Images\Title.png-autosave.kra" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\Background.png" />
+    <Resource Include="Images\ChessPieces\Black_Bishop.png" />
+    <Resource Include="Images\ChessPieces\Black_King.png" />
+    <Resource Include="Images\ChessPieces\Black_Knight.png" />
+    <Resource Include="Images\ChessPieces\Black_Pawn.png" />
+    <Resource Include="Images\ChessPieces\Black_Queen.png" />
+    <Resource Include="Images\ChessPieces\Black_Rook.png" />
+    <Resource Include="Images\ChessPieces\White_Bishop.png" />
+    <Resource Include="Images\ChessPieces\White_King.png" />
+    <Resource Include="Images\ChessPieces\White_Knight.png" />
+    <Resource Include="Images\ChessPieces\White_Pawn.png" />
+    <Resource Include="Images\ChessPieces\White_Queen.png" />
+    <Resource Include="Images\ChessPieces\White_Rook.png" />
+    <Resource Include="Images\CoolBackground.png" />
     <Resource Include="Images\Title.png" />
   </ItemGroup>
 

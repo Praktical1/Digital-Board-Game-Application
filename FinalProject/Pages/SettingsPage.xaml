@@ -24,6 +24,8 @@
             <Button Content="Back to Menu" Click="BtnMainMenu" />
             <Button Content="Default" Click="ChangeBackgroundtoDefault" />
             <Button Content="Cool" Click="ChangeBackgroundtoCool" />
+            <Button Content="Register" Click="BtnRegister" />
+            <Button Content="Login" Click="BtnLogin" />
         </StackPanel>
     </Grid>
 </Page>

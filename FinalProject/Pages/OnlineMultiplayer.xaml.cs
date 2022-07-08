@@ -17,20 +17,15 @@ using System.Windows.Shapes;
 namespace FinalProject.Pages
 {
     /// <summary>
-    /// Interaction logic for Solo.xaml
+    /// Interaction logic for OnlineMultiplayer.xaml
     /// </summary>
-    public partial class Solo : Page
+    public partial class OnlineMultiplayer : Page
     {
-        Settings setting;
-        public Solo(Settings setting)
+        private Settings setting;
+        public OnlineMultiplayer(Settings setting)
         {
             InitializeComponent();
             this.setting = setting;
-        }
-
-        private void BtnMainMenu(object sender, RoutedEventArgs x)
-        {
-            NavigationService.Navigate(new MainMenu(setting));
         }
     }
 }

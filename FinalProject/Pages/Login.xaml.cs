@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinalProject.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,20 @@ using System.Windows.Shapes;
 
 namespace FinalProject.Pages
 {
-    /// <summary>
-    /// Interaction logic for Login.xaml
-    /// </summary>
     public partial class Login : Page
     {
-        public Login()
+        private Settings setting;
+        public Login(Settings setting)
         {
             InitializeComponent();
+            this.setting = setting;
+        }
+
+        private void BtnLogin(object sender, RoutedEventArgs x)
+        {
+            String? username = user.Text;
+            String? password = pass.Text;
+            NavigationService.Navigate(new SettingsPage(setting));
         }
     }
 }

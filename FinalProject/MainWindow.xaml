@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
     <Grid>
-        <Image Source="/Images/Background.png" Stretch="UniformToFill"/>
+        <Image x:Name="Background" Source="/Images/Background.png" Stretch="UniformToFill"/>
         <Frame x:Name="Main" Margin="0" NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

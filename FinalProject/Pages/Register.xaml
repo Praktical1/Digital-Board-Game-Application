@@ -9,6 +9,83 @@
       Title="Register">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         
+        <!--Effects-->
+        <Grid.Resources>
+            <Style x:Key="TextBoxGlow" TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="0"
+                                   To="1" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="1"
+                                   To="0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <!--Page-->
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" >
+            <Label Content="Register Screen" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#5b0000" />
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1" Background="Honeydew">
+            <Label Content="Username:" FontSize="30" VerticalAlignment="Center" Foreground="#5b0000" />
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="2" Background="Honeydew">
+            <TextBox x:Name="user" Margin="15"  Padding="5" FontSize="40" />
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1" Background="Honeydew">
+            <Label Content="Password:" FontSize="30" VerticalAlignment="Center" Foreground="#5b0000" />
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="2" Background="Honeydew">
+            <TextBox x:Name="pass" Margin="15" Padding="5" FontSize="40" />
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="1" Background="Honeydew">
+            <Label Content="Confirm Password:" FontSize="30" VerticalAlignment="Center" Foreground="#5b0000" />
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="2" Background="Honeydew">
+            <TextBox x:Name="confirm_pass" Margin="15" Padding="5" FontSize="40" />
+        </Grid>
+        <Button Background="#01000000" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" FontSize="60"  BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" HorizontalAlignment="Center" Click="BtnSignUp">
+            <TextBlock Text="Sign up">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Page>

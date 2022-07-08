@@ -9,6 +9,55 @@
       Title="Solo">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
         
+        <!--Effects-->
+        <Grid.Resources>
+            <Style x:Key="TextBoxGlow" TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="0"
+                                   To="1" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="1"
+                                   To="0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        
+        
+        <!--Page-->
+        <Label HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
+            <TextBlock Text="You Win (by Default), cos I haven't made a AI, much less know how to play well myself xD" FontSize="30" TextWrapping="Wrap" FontWeight="Bold"  Foreground="#5b0000"/>
+        </Label>
+        <Button Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnMainMenu" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Return to Menu">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Page>

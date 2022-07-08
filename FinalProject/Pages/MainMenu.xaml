@@ -41,7 +41,6 @@
                     </EventTrigger>
                 </Style.Triggers>
             </Style>
-
         </Grid.Resources>
 
         <!--Title-->
@@ -62,8 +61,20 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnMultiplayer" FontSize="60" HorizontalAlignment="Center">
-                    <TextBlock Text="Multiplayer">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnLocalMultiplayer" FontSize="60" HorizontalAlignment="Center">
+                    <TextBlock Text="Local Multiplayer">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnOnlineMultiplayer" FontSize="60" HorizontalAlignment="Center">
+                    <TextBlock Text="Online Multiplayer">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
                         </TextBlock.Effect>

@@ -46,5 +46,15 @@ namespace FinalProject.Pages
         {
             setting.background = "../Images/CoolBackground.png";
         }
+
+        private void BtnRegister(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Register(setting));
+        }
+
+        private void BtnLogin(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Login(setting));
+        }
     }
 }

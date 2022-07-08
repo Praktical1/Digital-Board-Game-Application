@@ -17,13 +17,15 @@ using System.Windows.Shapes;
 namespace FinalProject.Pages
 {
     /// <summary>
-    /// Interaction logic for Multiplayer.xaml
+    /// Interaction logic for LocalMultiplayer.xaml
     /// </summary>
-    public partial class Multiplayer : Page
+    public partial class LocalMultiplayer : Page
     {
-        public Multiplayer(Settings setting)
+        private Settings setting;
+        public LocalMultiplayer(Settings setting)
         {
             InitializeComponent();
+            this.setting = setting;
         }
     }
 }

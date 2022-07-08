@@ -39,9 +39,15 @@ namespace FinalProject.Pages
         }
 
         //Responsible for taking user to Multiplayer page
-        private void BtnMultiplayer(object sender, RoutedEventArgs x)
+        private void BtnLocalMultiplayer(object sender, RoutedEventArgs x)
         {
-            NavigationService.Navigate(new Multiplayer(setting));
+            NavigationService.Navigate(new LocalMultiplayer(setting));
+        }
+
+        //Responsible for taking user to Multiplayer page
+        private void BtnOnlineMultiplayer(object sender, RoutedEventArgs x)
+        {
+            NavigationService.Navigate(new OnlineMultiplayer(setting));
         }
 
         //Responsible for taking user to Settings page

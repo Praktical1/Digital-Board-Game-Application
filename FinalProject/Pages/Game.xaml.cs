@@ -1,5 +1,4 @@
-﻿using FinalProject.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,20 +16,13 @@ using System.Windows.Shapes;
 namespace FinalProject.Pages
 {
     /// <summary>
-    /// Interaction logic for Solo.xaml
+    /// Interaction logic for Game.xaml
     /// </summary>
-    public partial class Solo : Page
+    public partial class Game : Page
     {
-        Settings setting;
-        public Solo(Settings setting)
+        public Game()
         {
             InitializeComponent();
-            this.setting = setting;
-        }
-
-        private void BtnMainMenu(object sender, RoutedEventArgs x)
-        {
-            NavigationService.Navigate(new MainMenu(setting));
         }
     }
 }
