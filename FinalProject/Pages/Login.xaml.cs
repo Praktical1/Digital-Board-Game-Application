@@ -30,6 +30,36 @@ namespace FinalProject.Pages
             String? username = user.Text;
             String? password = pass.Text;
             NavigationService.Navigate(new SettingsPage(setting));
+            //if (loginInfo.Count == 0)
+            //{
+            //    Console.WriteLine("Please create an account first\n");
+            //}
+            //else
+            //{
+            //    while (!loggedIn)
+            //    {
+            //        Console.Write("Username:");
+            //        String? user = Console.ReadLine();
+            //        Console.Write("Password:");
+            //        String? pass = Console.ReadLine();
+            //        for (int i = 0; i < loginInfo.Count; i += 2)
+            //        {
+            //            if (loginInfo[i].Equals(user))
+            //            {
+            //                if (pass.Equals(loginInfo[i + 1]))
+            //                {
+            //                    loggedIn = true;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    if (loggedIn)
+            //    {
+            //        Console.WriteLine("Awesome you logged in now");
+            //    }
+            //    else { Console.WriteLine("Wrong credentials"); }
+            //    break;
+            //}
         }
     }
 }

@@ -40,11 +40,13 @@ namespace FinalProject.Pages
         private void ChangeBackgroundtoDefault(object sender, RoutedEventArgs e)
         {
             setting.background = "../Images/Background.png";
+            this.NavigationService.Refresh();
         }
 
         private void ChangeBackgroundtoCool(object sender, RoutedEventArgs e)
         {
             setting.background = "../Images/CoolBackground.png";
+            
         }
 
         private void BtnRegister(object sender, RoutedEventArgs e)

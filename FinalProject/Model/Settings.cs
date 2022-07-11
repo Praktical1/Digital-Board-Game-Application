@@ -12,6 +12,7 @@ namespace FinalProject.Model
         public string background { get; set; }
         public string style { get; set; }
         public string userId { get; set; }
+        public string password { get; set; }
         private static Random rng = new Random();
 
         public Settings()
@@ -19,6 +20,7 @@ namespace FinalProject.Model
             this.background = "../Images/Background.png";
             this.style = "default";
             this.userId = "Guest_" + rng.Next(99999999).ToString();
+            this.password = "";
         }
 
     }

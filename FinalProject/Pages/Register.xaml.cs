@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace FinalProject.Pages
 {
@@ -28,9 +29,17 @@ namespace FinalProject.Pages
         {
             InitializeComponent();
             this.setting = setting;
-            String connectionString = "Data Source=sql8.freesqldatabase.com,3306;Initial Catalog=sql8504638;User Id=sql8504638;Password=2E2n5mxEpT;Authentication=Sql Password";
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "localhost";
+            builder.UserInstance = true;
+            builder.InitialCatalog = "model";
+            builder.IntegratedSecurity = true;
+            Trace.WriteLine(builder.ConnectionString);
+            String connectionString = "Data Source=PUKACHEW\\PRAKSERVER;Integrated Security=True;TrustServerCertificate=False;Encrypt=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Database=test";
             connect = new SqlConnection(connectionString);
-            SQLConnectionOpen();
+            connect.Open();
+            MessageBox.Show("Connection Open  !");
+            connect.Close();
         }
 
         public void SQLConnectionOpen()
@@ -63,7 +72,36 @@ namespace FinalProject.Pages
             String? username = user.Text;
             String? password = pass.Text;
             String? passwordConfirm = confirm_pass.Text;
-
+            Boolean found = false;
+            NavigationService.Navigate(new SettingsPage(setting));
+            //if (username != null && password != null)     //Confirms username and password is not null
+            //{
+            //    if (password.Equals(passwordConfirm))
+            //    {
+            //        for (int i = 0; i < loginInfo.Count; i += 2)
+            //        {
+            //            if (loginInfo[i].Equals(username))
+            //            {
+            //                MessageBox.Show("Please try a different username");
+            //                found = true;
+            //            }
+            //        }
+            //        if (!found)
+            //        {
+            //            loginInfo.Add(username);         //adds user to login list
+            //            loginInfo.Add(password);
+            //            MessageBox.Show("Account Registered");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("The two passwords do not match");
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Make sure you have entered a username and password");
+            //}
         }
     }
 }

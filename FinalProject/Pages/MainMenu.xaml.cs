@@ -41,7 +41,7 @@ namespace FinalProject.Pages
         //Responsible for taking user to Multiplayer page
         private void BtnLocalMultiplayer(object sender, RoutedEventArgs x)
         {
-            NavigationService.Navigate(new LocalMultiplayer(setting));
+            NavigationService.Navigate(new Chess());         //new LocalMultiplayer(setting));
         }
 
         //Responsible for taking user to Multiplayer page
