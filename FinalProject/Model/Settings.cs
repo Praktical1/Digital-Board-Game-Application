@@ -13,6 +13,9 @@ namespace FinalProject.Model
         public string style { get; set; }
         public string userId { get; set; }
         public string password { get; set; }
+        public string gameType { get; set; }
+        public Boolean forcedMove { get; set; }
+
         private static Random rng = new Random();
 
         public Settings()
@@ -21,6 +24,8 @@ namespace FinalProject.Model
             this.style = "default";
             this.userId = "Guest_" + rng.Next(99999999).ToString();
             this.password = "";
+            this.gameType = "Checkers";
+            this.forcedMove = true;
         }
 
     }

@@ -10,6 +10,10 @@
 
   <ItemGroup>
     <None Remove="Images\Background.png" />
+    <None Remove="Images\CheckerPieces\Black_King.png" />
+    <None Remove="Images\CheckerPieces\Black_Pawn.png" />
+    <None Remove="Images\CheckerPieces\Red_King.png" />
+    <None Remove="Images\CheckerPieces\Red_Pawn.png" />
     <None Remove="Images\ChessPieces\Black_Bishop.png" />
     <None Remove="Images\ChessPieces\Black_King.png" />
     <None Remove="Images\ChessPieces\Black_Knight.png" />
@@ -23,17 +27,25 @@
     <None Remove="Images\ChessPieces\White_Queen.png" />
     <None Remove="Images\ChessPieces\White_Rook.png" />
     <None Remove="Images\CoolBackground.png" />
+    <None Remove="Images\error-icon.png" />
     <None Remove="Images\Title.png" />
     <None Remove="Images\Title.png-autosave.kra" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\Background.png" />
+    <Resource Include="Images\CheckerPieces\Black_King.png" />
+    <Resource Include="Images\CheckerPieces\Black_Pawn.png" />
+    <Resource Include="Images\CheckerPieces\Red_King.png" />
+    <Resource Include="Images\CheckerPieces\Red_Pawn.png" />
     <Resource Include="Images\ChessPieces\Black_Bishop.png" />
     <Resource Include="Images\ChessPieces\Black_King.png" />
     <Resource Include="Images\ChessPieces\Black_Knight.png" />
@@ -47,6 +59,7 @@
     <Resource Include="Images\ChessPieces\White_Queen.png" />
     <Resource Include="Images\ChessPieces\White_Rook.png" />
     <Resource Include="Images\CoolBackground.png" />
+    <Resource Include="Images\error-icon.png" />
     <Resource Include="Images\Title.png" />
   </ItemGroup>
 

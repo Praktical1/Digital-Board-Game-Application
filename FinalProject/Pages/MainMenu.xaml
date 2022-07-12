@@ -47,9 +47,9 @@
         <Image Source="../Images/Title.png" />
         
         <!--Menu-->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0 0 0 10">
             <StackPanel>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnSolo" FontSize="60" HorizontalAlignment="Center">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnSolo" FontSize="60" HorizontalAlignment="Center">
                     <TextBlock Text="Solo">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
@@ -61,7 +61,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnLocalMultiplayer" FontSize="60" HorizontalAlignment="Center">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLocalMultiplayer" FontSize="60" HorizontalAlignment="Center">
                     <TextBlock Text="Local Multiplayer">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
@@ -73,7 +73,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnOnlineMultiplayer" FontSize="60" HorizontalAlignment="Center">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnOnlineMultiplayer" FontSize="60" HorizontalAlignment="Center">
                     <TextBlock Text="Online Multiplayer">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
@@ -85,7 +85,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnSettings" FontSize="60" HorizontalAlignment="Center">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnSettings" FontSize="60" HorizontalAlignment="Center">
                     <TextBlock Text="Settings">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
@@ -97,7 +97,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnExit" FontSize="60" HorizontalAlignment="Center">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnExit" FontSize="60" HorizontalAlignment="Center">
                     <TextBlock Text="Exit">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
@@ -111,6 +111,18 @@
                 </Button>
             </StackPanel>
         </ScrollViewer>
+        
+        <!--Gametype Selector-->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="Checkers" Grid.Column="0" Content="Checkers" Click="BtnCheckers" FontSize="30" Background="Gray" Foreground="White" />
+            <Button x:Name="Chess"  Grid.Column="1" Content="Chess (work in progress)" Click="BtnChess" FontSize="30" Background="Gray" Foreground="White" />
+            <Label Grid.Column="2" Content="By Praktical1" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="30" />
+        </Grid>
 
     </Grid>
 </Page>

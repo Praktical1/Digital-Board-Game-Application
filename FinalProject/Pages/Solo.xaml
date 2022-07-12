@@ -45,12 +45,12 @@
         
         <!--Page-->
         <Label HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
-            <TextBlock Text="You Win (by Default), cos I haven't made a AI, much less know how to play well myself xD" FontSize="30" TextWrapping="Wrap" FontWeight="Bold"  Foreground="#5b0000"/>
+            <TextBlock Text="You Win (by Default), cos I haven't made a AI, much less know how to play well myself xD" FontSize="30" TextWrapping="Wrap" FontWeight="Bold"  Foreground="#E02700"/>
         </Label>
-        <Button Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnMainMenu" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnMainMenu" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Return to Menu">
                 <TextBlock.Effect>
-                    <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
                 </TextBlock.Effect>
             </TextBlock>
             <Button.Template>

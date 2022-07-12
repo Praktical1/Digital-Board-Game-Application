@@ -29,24 +29,38 @@ namespace FinalProject.Pages
         {
             this.setting = setting;
             InitializeComponent();
+            if (setting.background == "../Images/CoolBackground.png")
+            {
+                Default.Background = new BrushConverter().ConvertFromString("#00FFFFFF") as SolidColorBrush;
+                Cool.Background = Brushes.Green;
+            }
+            if (setting.forcedMove == true)
+            {
+                ForceCapture.Background = Brushes.Green;
+            }
         }
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {
-            String settingsFile = setting.background + " " + setting.style + " " + setting.userId;
-            File.WriteAllText("Settings.txt", settingsFile);
+            SaveSettings();
             NavigationService.Navigate(new MainMenu(setting));
         }
 
         private void ChangeBackgroundtoDefault(object sender, RoutedEventArgs e)
         {
             setting.background = "../Images/Background.png";
-            this.NavigationService.Refresh();
+            MessageBox.Show("Please restart program to see changes to Background");
+            SaveSettings();
+            Default.Background = Brushes.Green;
+            Cool.Background = new BrushConverter().ConvertFromString("#00FFFFFF") as SolidColorBrush;
         }
 
         private void ChangeBackgroundtoCool(object sender, RoutedEventArgs e)
         {
             setting.background = "../Images/CoolBackground.png";
-            
+            MessageBox.Show("Please restart program to see changes to Background");
+            SaveSettings();
+            Default.Background = new BrushConverter().ConvertFromString("#00FFFFFF") as SolidColorBrush;
+            Cool.Background = Brushes.Green;
         }
 
         private void BtnRegister(object sender, RoutedEventArgs e)
@@ -57,6 +71,25 @@ namespace FinalProject.Pages
         private void BtnLogin(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Login(setting));
+        }
+
+        private void BtnForcedCaptureRule(object sender, RoutedEventArgs e)
+        {
+            if (setting.forcedMove == true)
+            {
+                setting.forcedMove = false;
+                ForceCapture.Background = Brushes.Red;
+            } else
+            {
+                setting.forcedMove = true;
+                ForceCapture.Background = Brushes.Green;
+            }
+        }
+
+        private void SaveSettings()
+        {
+            String settingsFile = setting.background + " " + setting.style + " " + setting.userId;
+            File.WriteAllText("Settings.txt", settingsFile);
         }
     }
 }

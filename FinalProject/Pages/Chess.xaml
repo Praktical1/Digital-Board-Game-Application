@@ -18,6 +18,47 @@
             <RowDefinition Height="10*" />
             <RowDefinition />
         </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style x:Key="TextBoxGlow" TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="0"
+                                   To="1" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="1"
+                                   To="0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <!--Main Menu Button-->
+        <Button Grid.Row="0" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="White" Click="BtnMainMenu" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Return to Menu">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="White" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Label x:Name="BlackTurn" Content="Black Turn" Grid.Row="0" Grid.Column="1" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="WhiteTurn" Content="White Turn" Grid.Row="2" Grid.Column="1" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
         <!--Board-->
         <Grid Background="#7d3f10" Grid.Row="1" Grid.Column="1" >
             <Grid.ColumnDefinitions>

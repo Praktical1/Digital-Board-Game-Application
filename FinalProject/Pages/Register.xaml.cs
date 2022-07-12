@@ -15,12 +15,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Builder;
+using Azure.Security.KeyVault.Secrets;
+using System.Threading;
+using System.Configuration;
 
 namespace FinalProject.Pages
 {
-    /// <summary>
-    /// Interaction logic for Register.xaml
-    /// </summary>
+    //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+    //builder.DataSource = "sql8.freesqldatabase.com";
+    //builder.InitialCatalog = "sql8504919";
+    //builder.UserID = "sql8504919";
+    //builder.Password = "PRUVBltZd1";
+    //builder.TrustServerCertificate = false;
+    //builder.Encrypt = false;
+    //builder.ApplicationIntent = ApplicationIntent.ReadWrite;
+    //builder.MultiSubnetFailover = false;
+    //Trace.WriteLine(builder.ConnectionString);
     public partial class Register : Page
     {
         private SqlConnection connect;
@@ -29,21 +40,35 @@ namespace FinalProject.Pages
         {
             InitializeComponent();
             this.setting = setting;
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "localhost";
-            builder.UserInstance = true;
-            builder.InitialCatalog = "model";
-            builder.IntegratedSecurity = true;
-            Trace.WriteLine(builder.ConnectionString);
-            String connectionString = "Data Source=PUKACHEW\\PRAKSERVER;Integrated Security=True;TrustServerCertificate=False;Encrypt=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Database=test";
-            connect = new SqlConnection(connectionString);
-            connect.Open();
-            MessageBox.Show("Connection Open  !");
+
+            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationToken token = source.Token;
+            GetConnectionStrings();
+            SQLConnectionOpen();
+            
             connect.Close();
+        }
+        static void GetConnectionStrings()
+        {
+            ConnectionStringSettingsCollection credentials =
+            ConfigurationManager.ConnectionStrings;
+
+            if (credentials != null)
+            {
+                foreach (ConnectionStringSettings cs in credentials)
+                {
+                    Console.WriteLine(cs.Name);
+                    Console.WriteLine(cs.ProviderName);
+                    Console.WriteLine(cs.ConnectionString);
+                }
+            }
         }
 
         public void SQLConnectionOpen()
         {
+            
+            String connectionString = "";
+            connect = new SqlConnection(connectionString);
             connect.Open();
             MessageBox.Show("Connection Open  !");
 
@@ -62,9 +87,6 @@ namespace FinalProject.Pages
             }
 
             MessageBox.Show(Output);
-
-
-            connect.Close();
         }
 
         private void BtnSignUp(object sender, RoutedEventArgs x)
@@ -72,7 +94,7 @@ namespace FinalProject.Pages
             String? username = user.Text;
             String? password = pass.Text;
             String? passwordConfirm = confirm_pass.Text;
-            Boolean found = false;
+            Boolean found = false;      
             NavigationService.Navigate(new SettingsPage(setting));
             //if (username != null && password != null)     //Confirms username and password is not null
             //{

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using FinalProject.Model;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace FinalProject.Pages
 {
     public partial class Chess : Page
     {
+        Settings setting;
         //Multi-dimensional jagged array to hold information of all chess pieces
         String[,][] Board = new String[8, 8][] {
             { new string[] { "W", "2" }, new string[] { "W", "3" }, new string[] { "W", "4" }, new string[] { "W", "5" }, new string[] { "W", "6" }, new string[] { "W", "4" }, new string[] { "W", "3" }, new string[] { "W", "2" } },
@@ -32,13 +35,21 @@ namespace FinalProject.Pages
         //Key (0 = Empty), (1 = Pawn), (2 = Rook), (3 = Knight), (4 = Bishop), (5 = Queen), (6 = King)
 
         //Holds selected variable
-        String[] selected = new string[2];
-        public test()
+        String[] selected = new string[3];
+        public Chess(Settings setting)
         {
+            this.setting = setting;
             InitializeComponent();
             Turn("W");
         }
 
+        //For returning to Menu
+        private void BtnMainMenu(object sender, RoutedEventArgs x)
+        {
+            NavigationService.Navigate(new MainMenu(setting));
+        }
+
+        //Two conversion functions from index of array to board and vice versa
         private string NumToString(int loopReference)
         {
             switch (loopReference)
@@ -77,6 +88,15 @@ namespace FinalProject.Pages
         //Red - #FF0000
         private void Turn(String side)
         {
+            if(side == "W")
+            {
+                WhiteTurn.Visibility = Visibility.Visible;
+                BlackTurn.Visibility = Visibility.Hidden;
+            } else if (side == "B")
+            {
+                WhiteTurn.Visibility = Visibility.Hidden;
+                BlackTurn.Visibility = Visibility.Visible;
+            }
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -96,35 +116,142 @@ namespace FinalProject.Pages
                             }
                         }
                     }
-                    if (Board[i, j][1] == "3")
-                    {
-                        foreach (object container in ButtonContainer.Children)
-                        {
-                            var gridselect = container as Grid;
-                            foreach (Button button in gridselect.Children)
-                            {
-                                string selection = NumToString(j) + (i + 1).ToString() + "Select";
-                                if (button.Name == selection)
-                                {
-                                    button.Background = new BrushConverter().ConvertFromString("#FFFF00") as SolidColorBrush;
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
 
-        private void Select(String grid)
+        private Boolean IsRed(string grid)
         {
-            MessageBox.Show("Selected: " + grid);
             foreach (object container in ButtonContainer.Children)
             {
                 var gridselect = container as Grid;
                 foreach (Button button in gridselect.Children)
                 {
-                    button.Visibility = Visibility.Visible;
+                    string ButtonName = grid + "Select";
+                    if (button.Name == ButtonName)
+                    {
+                        if (button.Background == new BrushConverter().ConvertFromString("#FF0000") as SolidColorBrush)
+                        {
+                            return true;
+                        } else
+                        {
+                            return false;
+                        }
+                    }
                 }
+            }
+            MessageBox.Show("Error in IsRed");
+            return true;
+        }
+        private void Pawn()
+        {
+
+        }
+        private void Select(String grid)
+        {
+            if (!IsRed(grid))
+            {
+                string[] temp = Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())];
+                MessageBox.Show("Selected: " + grid);
+                string[] blank = new string[3];
+                if (selected[0] == null)
+                {
+                    MessageBox.Show("Selecting");
+                    foreach (object container in ButtonContainer.Children)
+                    {
+                        var gridselect = container as Grid;
+                        foreach (Button button in gridselect.Children)
+                        {
+                            button.Visibility = Visibility.Visible; //Final should be hidden
+                        }
+                    }
+
+                    //Storing of data
+                    selected[0] = grid;
+                    selected[1] = temp[0].ToString();
+                    selected[2] = temp[1].ToString();
+                    Trace.WriteLine(selected[0] + "-" + selected[1] + "-" + selected[2]);
+                }
+                else if (selected[1] == temp[0] && selected[2] == temp[1])                    //When you want to undo selection
+                {
+                    MessageBox.Show("Reseting");
+                    Turn(temp[0]);
+                    selected = new string[3];
+                }
+                else
+                {
+                    MessageBox.Show("Changing");
+                    //Grab image
+                    foreach (object container in ImageContainer.Children)
+                    {
+                        var gridselect = container as Grid;
+                        foreach (Image image in gridselect.Children)
+                        {
+                            if (image.Name == selected[0])
+                            {
+                                image.Source = new BitmapImage(new Uri(@"../../../Images/Blank.png", UriKind.Relative));
+                            }
+
+                            //Place piece
+                            if (image.Name == grid)
+                            {
+                                string piece = ImageSelector(selected[1], selected[2]);
+                                image.Source = new BitmapImage(new Uri(@piece, UriKind.Relative));
+                            }
+                        }
+                    }
+                    Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())][0] = selected[1];
+                    Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())][1] = selected[2];
+                    Board[Int32.Parse(selected[0][1].ToString()) - 1, StringToNum(selected[0][0].ToString())][0] = "E";
+                    Board[Int32.Parse(selected[0][1].ToString()) - 1, StringToNum(selected[0][0].ToString())][1] = "0";
+                    selected = new string[3];
+                }
+            }
+            
+
+
+        }
+
+        private string ImageSelector(string colour, string type)
+        {
+            switch (colour)
+            {
+                case "W":
+                    switch (type)
+                    {
+                        case "1":
+                            return "../../../Images/ChessPieces/White_Pawn.png";
+                        case "2":
+                            return "../../../Images/ChessPieces/White_Rook.png";
+                        case "3":
+                            return "../../../Images/ChessPieces/White_Knight.png";
+                        case "4":
+                            return "../../../Images/ChessPieces/White_Bishop.png";
+                        case "5":
+                            return "../../../Images/ChessPieces/White_Queen.png";
+                        case "6":
+                            return "../../../Images/ChessPieces/White_King.png";
+                        default: return "../../../Images/error-icon.png";
+                    }
+                case "B":
+                    switch (type)
+                    {
+                        case "1":
+                            return "../../../Images/ChessPieces/Black_Pawn.png";
+                        case "2":
+                            return "../../../Images/ChessPieces/Black_Rook.png";
+                        case "3":
+                            return "../../../Images/ChessPieces/Black_Knight.png";
+                        case "4":
+                            return "../../../Images/ChessPieces/Black_Bishop.png";
+                        case "5":
+                            return "../../../Images/ChessPieces/Black_Queen.png";
+                        case "6":
+                            return "../../../Images/ChessPieces/Black_King.png";
+                        default: return "../../../Images/error-icon.png";
+                    }
+                default: return "../../../Images/error-icon.png";
+
             }
         }
 
