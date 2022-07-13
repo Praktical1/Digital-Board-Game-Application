@@ -1,6 +1,8 @@
 ﻿using FinalProject.Model;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -15,60 +17,34 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Builder;
-using Azure.Security.KeyVault.Secrets;
-using System.Threading;
-using System.Configuration;
 
 namespace FinalProject.Pages
 {
-    //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-    //builder.DataSource = "sql8.freesqldatabase.com";
-    //builder.InitialCatalog = "sql8504919";
-    //builder.UserID = "sql8504919";
-    //builder.Password = "PRUVBltZd1";
-    //builder.TrustServerCertificate = false;
-    //builder.Encrypt = false;
-    //builder.ApplicationIntent = ApplicationIntent.ReadWrite;
-    //builder.MultiSubnetFailover = false;
-    //Trace.WriteLine(builder.ConnectionString);
     public partial class Register : Page
     {
+        private IConfiguration Configuration;
         private SqlConnection connect;
         private Settings setting;
         public Register(Settings setting)
         {
-            InitializeComponent();
             this.setting = setting;
-
-            CancellationTokenSource source = new CancellationTokenSource();
-            CancellationToken token = source.Token;
-            GetConnectionStrings();
-            SQLConnectionOpen();
-            
-            connect.Close();
-        }
-        static void GetConnectionStrings()
-        {
-            ConnectionStringSettingsCollection credentials =
-            ConfigurationManager.ConnectionStrings;
-
-            if (credentials != null)
-            {
-                foreach (ConnectionStringSettings cs in credentials)
-                {
-                    Console.WriteLine(cs.Name);
-                    Console.WriteLine(cs.ProviderName);
-                    Console.WriteLine(cs.ConnectionString);
-                }
-            }
+            InitializeComponent();
+            GetConnect();
         }
 
-        public void SQLConnectionOpen()
+        public void GetConnect()
         {
-            
-            String connectionString = "";
-            connect = new SqlConnection(connectionString);
+            var builder = new ConfigurationBuilder()
+             .SetBasePath(Directory.GetCurrentDirectory())
+             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            Configuration = builder.Build();
+
+            connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
+        }
+
+        public void SQLOperation()
+        {
             connect.Open();
             MessageBox.Show("Connection Open  !");
 
@@ -87,6 +63,7 @@ namespace FinalProject.Pages
             }
 
             MessageBox.Show(Output);
+            connect.Close();
         }
 
         private void BtnSignUp(object sender, RoutedEventArgs x)

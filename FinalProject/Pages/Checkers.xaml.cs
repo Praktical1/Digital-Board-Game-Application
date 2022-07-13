@@ -1,4 +1,5 @@
 ﻿using FinalProject.Model;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,12 +18,17 @@ using System.Windows.Shapes;
 
 namespace FinalProject.Pages
 {
-    /// <summary>
-    /// Interaction logic for Checkers.xaml
-    /// </summary>
     public partial class Checkers : Page
     {
         Settings setting;
+        private SqlConnection connect;
+        Boolean online = false;
+        Boolean yourTurn = true;
+        Boolean jump = false;
+        Boolean endJump = false;
+        int surrenderCounter = 0;
+        string Lobby = "";
+
         //Multi-dimensional jagged array to hold information of all checker pieces
         String[,][] Board = new String[8, 8][] {
             { new string[] { "R", "1" }, new string[] { " ", " " }, new string[] { "R", "1" }, new string[] { " ", " " }, new string[] { "R", "1" }, new string[] { " ", " " }, new string[] { "R", "1" }, new string[] { " ", " " } },
@@ -39,22 +45,28 @@ namespace FinalProject.Pages
 
         //Holds selected variable
         String[] selected = new string[3];
-        Boolean online = false;
-        Boolean yourTurn = true;
-        Boolean jump = false;
-        Boolean endJump = false;
-        int surrenderCounter = 0;
-        string Lobby = "";
+        
         public Checkers(Settings setting, String Lobby, int player)
         {
             this.setting = setting;
             online = true;
             this.Lobby = Lobby;
+            InitializeComponent();
             if (player == 2)
             {
                 yourTurn = false;
+                RedTurn.Content = "Your Turn (Red)";
+                BlackTurn.Content = "Opponents Turn (Black)";
+                RedWon.Content = "You've Won (Red wins)";
+                BlackWon.Content = "You've Lost (Black wins)";
             }
-            InitializeComponent();
+            else
+            {
+                RedTurn.Content = "Opponents Turn (Red)";
+                BlackTurn.Content = "Your Turn (Black)";
+                RedWon.Content = "You've Lost (Red wins)";
+                BlackWon.Content = "You've Won (Black wins)";
+            }
             Turn("B");
         }
         public Checkers(Settings setting)
@@ -421,10 +433,41 @@ namespace FinalProject.Pages
             }
             Trace.WriteLine("Stored piece: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
         }
+
+        //Responsible for receiving moves of player
         private async void onlinePlayer()
         {
+            int timeoutCounter = 0;
             while (!yourTurn) {
+                
                 await Task.Delay(1000);
+
+
+                SqlCommand command;
+                SqlDataReader dataReader;
+                String sql, Output = "";
+                sql = "Select Username,Password from " + Lobby;
+                connect = new SqlConnection(connectionString);
+                command = new SqlCommand(sql, connect);
+                dataReader = command.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    timeoutCounter = 0;
+
+                    Output = dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + "\n";
+                }
+
+                if (timeoutCounter = 3)
+                {
+                    MessageBox.Show("Conection")
+                }
+
+                if (timeoutCounter = 20)
+                {
+
+                }
+                MessageBox.Show(Output);
             }
         }
 
