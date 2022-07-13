@@ -124,6 +124,7 @@ namespace FinalProject.Pages
                             if (check == "Ready")
                             {
                                 NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
+                                ready = false;
                             }
                         } catch { Trace.WriteLine("failed to check for ready"); connect.Close(); }
                         await Task.Delay(1000);
@@ -179,6 +180,7 @@ namespace FinalProject.Pages
                             if (check == "Ready")
                             {
                                 NavigationService.Navigate(new Checkers(setting, lobbyId, 2));
+                                ready = false;
                             }
                         }
                         catch { Trace.WriteLine("failed to check for ready"); connect.Close(); }

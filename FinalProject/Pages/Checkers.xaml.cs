@@ -446,7 +446,7 @@ namespace FinalProject.Pages
                 SqlCommand command;
                 SqlDataReader dataReader;
                 String sql, Output = "";
-                sql = "Select Username,Password from " + Lobby;
+                sql = "Select player2 from " + Lobby;
                 string connectionString="";
                 connect = new SqlConnection(connectionString);
                 command = new SqlCommand(sql, connect);
