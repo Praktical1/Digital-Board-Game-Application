@@ -21,7 +21,6 @@ namespace FinalProject.Model
         public Settings()
         {
             this.background = "../Images/Background.png";
-            this.style = "default";
             this.userId = "Guest_" + rng.Next(99999999).ToString();
             this.password = "";
             this.gameType = "Checkers";

@@ -54,7 +54,7 @@ namespace FinalProject.Pages
 
                 SqlCommand command;
                 SqlDataReader dataReader;
-                String sql, Output = "";
+                String sql = "";
 
                 sql = "Select Username,Password from loginDatabase";
 
@@ -81,6 +81,12 @@ namespace FinalProject.Pages
                 }
                 connect.Close();
             } catch { MessageBox.Show("Failed to connect to database"); NavigationService.Navigate(new SettingsPage(setting)); }
+        }
+
+        private void SaveSettings()
+        {
+            String settingsFile = setting.background + " " + setting.userId;
+            File.WriteAllText("Settings.txt", settingsFile);
         }
 
         private void BtnSignUp(object sender, RoutedEventArgs x)
@@ -115,6 +121,7 @@ namespace FinalProject.Pages
                             MessageBox.Show("Registered User");
                             connect.Close();
                             setting.userId = username;
+                            SaveSettings();
                         } catch { MessageBox.Show("Failed to register user to database"); }
                         NavigationService.Navigate(new SettingsPage(setting));
                     }
@@ -128,6 +135,10 @@ namespace FinalProject.Pages
             {
                 MessageBox.Show("Make sure you have entered a username and password");
             }
+        }
+        private void BtnMainMenu(object sender, RoutedEventArgs x)
+        {
+            NavigationService.Navigate(new MainMenu(setting));
         }
     }
 }

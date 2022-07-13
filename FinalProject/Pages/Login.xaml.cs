@@ -32,6 +32,7 @@ namespace FinalProject.Pages
             this.setting = setting;
             GetConnect();
         }
+
         public void GetConnect()
         {
             var builder = new ConfigurationBuilder()
@@ -52,7 +53,7 @@ namespace FinalProject.Pages
 
                 SqlCommand command;
                 SqlDataReader dataReader;
-                String sql, Output = "";
+                String sql = "";
 
                 sql = "Select Username,Password from loginDatabase";
 
@@ -83,6 +84,12 @@ namespace FinalProject.Pages
             }
             catch { MessageBox.Show("Failed to connect to database"); NavigationService.Navigate(new SettingsPage(setting)); }
         }
+        private void SaveSettings()
+        {
+            String settingsFile = setting.background + " " + setting.userId;
+            File.WriteAllText("Settings.txt", settingsFile);
+        }
+
         private void BtnLogin(object sender, RoutedEventArgs x)
         {
             String? username = user.Text;
@@ -107,6 +114,7 @@ namespace FinalProject.Pages
                         {
                             MessageBox.Show("You've Logged in as " + loginDatabase[i][0]);
                             setting.userId = username;
+                            SaveSettings();
                             NavigationService.Navigate(new SettingsPage(setting));
                         } else { MessageBox.Show("Wrong credentials"); }
                         found = true;
@@ -114,6 +122,11 @@ namespace FinalProject.Pages
                 }
                 if (!found) { MessageBox.Show("Wrong credentials"); }
             }
+        }
+
+        private void BtnMainMenu(object sender, RoutedEventArgs x)
+        {
+            NavigationService.Navigate(new MainMenu(setting));
         }
     }
 }

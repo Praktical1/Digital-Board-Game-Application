@@ -88,7 +88,7 @@ namespace FinalProject.Pages
 
         private void SaveSettings()
         {
-            String settingsFile = setting.background + " " + setting.style + " " + setting.userId;
+            String settingsFile = setting.background + " " + setting.userId;
             File.WriteAllText("Settings.txt", settingsFile);
         }
     }

@@ -51,7 +51,20 @@
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
-
+        
+        <!--Back to Menu-->
+        <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnMainMenu" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
+            <TextBlock Text="Back To Menu">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <!--Page-->
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" >
             <Label Content="Register Screen" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#5b0000" />

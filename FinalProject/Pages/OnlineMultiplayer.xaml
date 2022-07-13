@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:FinalProject.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="720" d:DesignWidth="1280"
       Title="OnlineMultiplayer">
 
     <Grid>
@@ -47,14 +47,14 @@
             </Style>
         </Grid.Resources>
 
-        <Label Grid.Column="1" Content="Settings" FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" />
+        <Label Grid.Column="1" Content="Online Multiplayer" FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="#66f0fff0" Padding="10">
             <StackPanel>
-                <Label x:Name="Online" Content="Online" Margin="60 0 0 0" FontSize="40" />
+                <Label x:Name="Title" Content="Lobbies" Margin="60 0 0 0" FontSize="40" />
                 <Separator/>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnRegister" FontSize="30" Padding="50 0 0 0" >
-                    <TextBlock Text="Register">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby1" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby1" Text="Lobby1">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
                         </TextBlock.Effect>
@@ -65,8 +65,8 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLogin" FontSize="30" Padding="50 0 0 0" >
-                    <TextBlock Text="Login">
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby2" Text="Lobby2">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
                         </TextBlock.Effect>
@@ -77,66 +77,119 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Separator />
-                <Label Content="Checkers rules" Margin="60 0 0 0" FontSize="40" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="12*"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnForcedCaptureRule" FontSize="30" Padding="50 0 0 0" >
-                        <TextBlock Text="ForceCapture Rule (Default = ON)">
-                            <TextBlock.Effect>
-                                <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
-                            </TextBlock.Effect>
-                        </TextBlock>
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-                    <Button x:Name="ForceCapture" Grid.Column="1" Background="Red" Click="BtnForcedCaptureRule"/>
-                </Grid>
-                <Separator/>
-                <Label Content="Background" Margin="60 0 0 0" FontSize="40" />
-                <StackPanel Orientation="Horizontal">
-                    <Grid x:Name="Default" Height="250" Background="Green">
-                        <Image Source="../Images/Background.png" Margin="10" />
-                        <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="ChangeBackgroundtoDefault" FontSize="100"   HorizontalAlignment="Center" VerticalAlignment="Center" >
-                            <TextBlock Text="Default">
-                                <TextBlock.Effect>
-                                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
-                                </TextBlock.Effect>
-                            </TextBlock>
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <ContentPresenter Content="{TemplateBinding Content}"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </Grid>
-                    <Grid x:Name="Cool" Height="250" Background="#00FFFFFF">
-                        <Image Source="../Images/CoolBackground.png" Margin="10"/>
-                        <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="ChangeBackgroundtoCool" FontSize="100"  HorizontalAlignment="Center" VerticalAlignment="Center" >
-                            <TextBlock Text="Cool">
-                                <TextBlock.Effect>
-                                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
-                                </TextBlock.Effect>
-                            </TextBlock>
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <ContentPresenter Content="{TemplateBinding Content}"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </Grid>
-                </StackPanel>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby3" Text="Lobby3">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby4" Text="Lobby4">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby5" Text="Lobby5">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby6" Text="Lobby6">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby7" Text="Lobby7">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby8" Text="Lobby8">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby9" Text="Lobby9">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby2" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock x:Name="Lobby10" Text="Lobby10">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
         </ScrollViewer>
+        
         <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnMainMenu" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
             <TextBlock Text="Back To Menu">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Grid.Column="2" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnCreateLobby" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
+            <TextBlock Text="Create Lobby">
                 <TextBlock.Effect>
                     <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
                 </TextBlock.Effect>

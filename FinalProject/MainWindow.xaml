@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinalProject"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="MainWindow" Height="720" Width="1280"
+        Closing="CloseGame">
     <Grid>
         <Image x:Name="Background" Source="/Images/Background.png" Stretch="UniformToFill"/>
         <Frame x:Name="Main" Margin="0" NavigationUIVisibility="Hidden" />
