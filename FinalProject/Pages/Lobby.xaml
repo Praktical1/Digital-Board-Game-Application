@@ -56,7 +56,7 @@
             <Label x:Name="Player2" Content="Player2" Margin="60 0 0 0"  Padding="10" FontSize="80" Visibility="Hidden"/>
             
         </StackPanel>
-        <Label x:Name="Countdown" Grid.Row="1" Grid.Column="1" FontSize="250" Content="3" HorizontalAlignment="Center" Background="#66f0fff0" />
+        <Label x:Name="Countdown" Grid.Row="1" Grid.Column="1" FontSize="250" Content="3" HorizontalAlignment="Center" Background="#66f0fff0" Visibility="Hidden"/>
         <Grid  Grid.Row="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

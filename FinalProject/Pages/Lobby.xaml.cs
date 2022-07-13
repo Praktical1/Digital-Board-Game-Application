@@ -74,37 +74,49 @@ namespace FinalProject.Pages
 
         public async void PingService()
         {
+            ping = true;
             while (ping)
             {
                 try
                 {
+                    SqlCommand command;
                     int opponent = 0;
                     if (player == 1)
                     {
                         opponent = 2;
                     }
-                    else { opponent = 1; }
+                    else
+                    {
+                        opponent = 1; 
+                        try
+                        {
+                            command = new SqlCommand("Update [dbo].[" + lobbyId + "] SET Player2 = '" + setting.userId + "' WHERE ID=1", connect);
+                            command.ExecuteNonQuery();
+                        }
+                        catch { }
+                    }
 
                     String sql = "Select Player" + opponent + " from [dbo].[" + lobbyId + "]";
-                    SqlCommand command = new SqlCommand(sql, connect);
+                    Trace.WriteLine(sql);
+                    command = new SqlCommand(sql, connect);
                     connect.Open();
-                    String name = "";
-                    String check = "";
+                    String[] output = new string[2];
                     SqlDataReader reader = command.ExecuteReader();
+                    int count = 0;
                     while (reader.Read())
                     {
-                        name = reader.GetValue(0).ToString();
-                        check = reader.GetValue(0).ToString();
+                        output[count] = (reader.GetValue(0).ToString());
+                        count++;
                     }
-                    Trace.WriteLine(name);
-                    Trace.WriteLine(check);
+                    Trace.WriteLine(output[0]);
+                    Trace.WriteLine(output[1]);
 
                     connect.Close();
                     if (player == 1)
                     {
-                        Player2.Content = name;
+                        Player2.Content = output[0];
                     }
-                    if (check == "Ready")
+                    if (output[1] == "Ready")
                     {
                         otherReady = true;
                         if (opponent == 2)
