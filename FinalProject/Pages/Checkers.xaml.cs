@@ -52,6 +52,7 @@ namespace FinalProject.Pages
             online = true;
             this.Lobby = Lobby;
             InitializeComponent();
+            StartPing.Visibility = Visibility.Visible;
             if (player == 2)
             {
                 yourTurn = false;
@@ -144,6 +145,10 @@ namespace FinalProject.Pages
             if (!jump)
             {
                 ForcedMove(side);
+            }
+            if (!yourTurn)
+            {
+                ClearButtons();
             }
         }
 
@@ -426,7 +431,6 @@ namespace FinalProject.Pages
             if (!yourTurn && online)
             {
                 ClearButtons();
-                onlinePlayer();
             } else
             {
                 yourTurn = true;
@@ -823,6 +827,13 @@ namespace FinalProject.Pages
                     }
                 }
             }
+        }
+
+        //For starting ping service (online multiplayer only)
+        private void BtnPingService(object sender, RoutedEventArgs x)
+        {
+            //PingService();
+            StartPing.Visibility = Visibility.Hidden;
         }
 
         //For returning to Menu

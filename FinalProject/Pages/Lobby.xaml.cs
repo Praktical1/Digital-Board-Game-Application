@@ -34,6 +34,9 @@ namespace FinalProject.Pages
         private SqlConnection connect;
         private Boolean ready = false;
         private string hostName;
+        private Boolean otherReady = false;
+        private Boolean ping = false;
+        private int counter = 0;
         public Lobby(Settings setting, string lobbyId, int player, string hostName)
         {
             InitializeComponent();
@@ -41,28 +44,118 @@ namespace FinalProject.Pages
             this.lobbyId = lobbyId;
             this.player = player;
             this.hostName = hostName;
+            Player1.Content = hostName;
+            Player2.Content = setting.userId;
             GetConnect();
         }
+        
         public Lobby(Settings setting, string lobbyId, int player)
         {
             InitializeComponent();
             this.setting = setting;
             this.lobbyId = lobbyId;
             this.player = player;
+            Player1.Content = setting.userId;
             GetConnect();
-            if (player == 1)
+            
+            try
             {
-                string sql = "Insert [dbo].[" + lobbyId + "] ([ID], [Player1], [Player2]) VALUES (1, 'waiting', 'waiting')";
+                connect.Open();
+                string sql = "Insert [dbo].[" + lobbyId + "] ([ID], [Player1], [Player2]) VALUES (1, '"+ setting.userId + "', 'Unknown')";
                 SqlCommand command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
+                sql = "Insert [dbo].[" + lobbyId + "] ([ID], [Player1], [Player2]) VALUES (2, 'waiting', 'waiting')";
+                command.ExecuteNonQuery();
+                command = new SqlCommand(sql, connect);
+                connect.Close();
+            }
+            catch { Trace.WriteLine("Failed to initialise"); connect.Close(); }
+        }
+
+        public async void PingService()
+        {
+            while (ping)
+            {
                 try
                 {
+                    int opponent = 0;
+                    if (player == 1)
+                    {
+                        opponent = 2;
+                    }
+                    else { opponent = 1; }
+
+                    String sql = "Select Player" + opponent + " from [dbo].[" + lobbyId + "]";
+                    SqlCommand command = new SqlCommand(sql, connect);
                     connect.Open();
-                    command.ExecuteNonQuery();
+                    String name = "";
+                    String check = "";
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        name = reader.GetValue(0).ToString();
+                        check = reader.GetValue(0).ToString();
+                    }
+                    Trace.WriteLine(name);
+                    Trace.WriteLine(check);
+
                     connect.Close();
+                    if (player == 1)
+                    {
+                        Player2.Content = name;
+                    }
+                    if (check == "Ready")
+                    {
+                        otherReady = true;
+                        if (opponent == 2)
+                        {
+                            Player2Ready.Background = Brushes.Green;
+                        }
+                        else
+                        {
+                            Player1Ready.Background = Brushes.Green;
+                        }
+                    }
+                    else
+                    {
+                        otherReady = false;
+                        if (player == 1)
+                        {
+                            Player2Ready.Background = Brushes.Red;
+                        }
+                        else
+                        {
+                            Player1Ready.Background = Brushes.Red;
+                        }
+                    }
+                } catch { Trace.WriteLine("Ping service broke :/"); try { connect.Close(); } catch { } }
+                switch (counter)
+                {
+                    case 0:
+                        Countdown.Visibility = Visibility.Hidden;
+                        Player1Ready.Visibility = Visibility.Visible;
+                        Player2Ready.Visibility = Visibility.Visible;
+                        break;
+                    case 1:
+                        Countdown.Visibility = Visibility.Visible;
+                        Countdown.Content = "3";
+                        break;
+                    case 2:
+                        Countdown.Content = "2";
+                        break;
+                    case 3:
+                        Countdown.Content = "1";
+                        Player1Ready.Visibility = Visibility.Hidden;
+                        Player2Ready.Visibility = Visibility.Hidden; ;
+                        break;
+                    case 4:
+                        Countdown.Content = "0";
+                        break;
                 }
-                catch { Trace.WriteLine("Failed to initialise"); connect.Close(); }
+                await Task.Delay(1000);
             }
         }
+
         public void GetConnect()
         {
             var builder = new ConfigurationBuilder()
@@ -83,12 +176,12 @@ namespace FinalProject.Pages
                 {
                     Player1Ready.Background = Brushes.Red;
                     ready = false;
-                    string sql = "DELETE FROM [dbo].[" + lobbyId + "] WHERE CONVERT(VARCHAR, Player1)='Ready'";
-                    command = new SqlCommand(sql, connect);
+                    //string sql = "DELETE FROM [dbo].[" + lobbyId + "] WHERE CONVERT(VARCHAR, Player1)='Ready'";
+                    //command = new SqlCommand(sql, connect);
                     try { 
                         connect.Open();
-                        command.ExecuteNonQuery();
-                        sql = "Update [dbo].[" + lobbyId + "] SET Player1 = 'waiting' WHERE ID=1";
+                        //command.ExecuteNonQuery();
+                        string sql = "Update [dbo].[" + lobbyId + "] SET Player1 = 'waiting' WHERE ID=2";
                         command = new SqlCommand(sql, connect);
                         command.ExecuteNonQuery();
                         connect.Close();
@@ -99,7 +192,7 @@ namespace FinalProject.Pages
                 {
                     Player1Ready.Background = Brushes.Green;
                     ready = true;
-                    string sql = "Update [dbo].["+lobbyId+"] SET Player1 = 'Ready' WHERE ID=1";
+                    string sql = "Update [dbo].["+lobbyId+"] SET Player1 = 'Ready' WHERE ID=2";
                     command =new SqlCommand(sql,connect);
                     try
                     {
@@ -109,23 +202,15 @@ namespace FinalProject.Pages
                     } catch { Trace.WriteLine("Failed to ready up"); connect.Close(); }
                     while (ready)
                     {
-                        try
+                        if (otherReady)
                         {
-                            sql = "Select Player2 from [dbo].[" + lobbyId + "]";
-                            command = new SqlCommand(sql, connect);
-                            connect.Open();
-                            String check = "";
-                            SqlDataReader reader = command.ExecuteReader();
-                            while (reader.Read())
-                            {
-                                check = reader.GetValue(0).ToString();
-                            }
-                            connect.Close();
-                            if (check == "Ready")
-                            {
-                                NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
-                            }
-                        } catch { Trace.WriteLine("failed to check for ready"); connect.Close(); }
+                            counter++;
+                        }
+                        if (counter > 4)
+                        {
+                            NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
+                            ready = false;
+                        }
                         await Task.Delay(1000);
                     }
                 }
@@ -136,13 +221,13 @@ namespace FinalProject.Pages
                 {
                     Player2Ready.Background = Brushes.Red;
                     ready = false;
-                    string sql = "DELETE FROM [dbo].[" + lobbyId + "] WHERE CONVERT(VARCHAR, Player2)='Ready'";
-                    command = new SqlCommand(sql, connect);
+                    //string sql = "DELETE FROM [dbo].[" + lobbyId + "] WHERE CONVERT(VARCHAR, Player2)='Ready'";
+                    //command = new SqlCommand(sql, connect);
                     try
                     {
                         connect.Open();
-                        command.ExecuteNonQuery();
-                        sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'waiting' WHERE ID=1";
+                        //command.ExecuteNonQuery();
+                        string sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'waiting' WHERE ID=2";
                         command = new SqlCommand(sql, connect);
                         command.ExecuteNonQuery();
                         connect.Close();
@@ -153,7 +238,7 @@ namespace FinalProject.Pages
                 {
                     Player2Ready.Background = Brushes.Green;
                     ready = true;
-                    string sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'Ready' WHERE ID=1";
+                    string sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'Ready' WHERE ID=2";
                     command = new SqlCommand(sql, connect);
                     try
                     {
@@ -164,42 +249,20 @@ namespace FinalProject.Pages
                     catch { Trace.WriteLine("Failed to ready up"); connect.Close(); }
                     while (ready)
                     {
-                        try
+                        if (otherReady)
                         {
-                            sql = "Select Player1 from [dbo].[" + lobbyId + "]";
-                            command = new SqlCommand(sql, connect);
-                            connect.Open();
-                            String check = "";
-                            SqlDataReader reader = command.ExecuteReader();
-                            while (reader.Read())
-                            {
-                                check = reader.GetValue(0).ToString();
-                            }
-                            connect.Close();
-                            if (check == "Ready")
-                            {
-                                NavigationService.Navigate(new Checkers(setting, lobbyId, 2));
-                            }
+                            counter++;
                         }
-                        catch { Trace.WriteLine("failed to check for ready"); connect.Close(); }
+                        if (counter > 4)
+                        {
+                            NavigationService.Navigate(new Checkers(setting, lobbyId, 2));
+                            ready = false;
+                        }
                         await Task.Delay(1000);
                     }
                 }
             }
             
-        }
-        public void BtnPlayer1Ready(object sender, RoutedEventArgs e)
-        {
-            PlayerReady(1);
-        }
-        public void BtnPlayer2Ready(object sender, RoutedEventArgs e)
-        {
-            PlayerReady(2);
-        }
-        private void BtnMultiplayer(object sender, RoutedEventArgs x)
-        {
-            Close();
-            NavigationService.Navigate(new OnlineMultiplayer(setting));
         }
 
         private void CloseLobby()
@@ -236,6 +299,9 @@ namespace FinalProject.Pages
                 string sql = "Insert [dbo].[lobbies] ([Lobby],[Host]) VALUES ('" + lobbyId + "','" + hostName + "')";
                 SqlCommand command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
+                sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'waiting' WHERE ID=2";
+                command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
                 connect.Close();
                 NavigationService.Navigate(new OnlineMultiplayer(setting));
             }
@@ -251,6 +317,30 @@ namespace FinalProject.Pages
             {
                 CreateLobbyListing();
             }
+        }
+
+        //For starting ping service
+        private void BtnPingService(object sender, RoutedEventArgs x)
+        {
+            PingService();
+            StartPing.Visibility = Visibility.Hidden;
+        }
+
+        //Ready Buttons
+        public void BtnPlayer1Ready(object sender, RoutedEventArgs e)
+        {
+            PlayerReady(1);
+        }
+        public void BtnPlayer2Ready(object sender, RoutedEventArgs e)
+        {
+            PlayerReady(2);
+        }
+
+        //Returning to lobby explorer
+        private void BtnMultiplayer(object sender, RoutedEventArgs x)
+        {
+            Close();
+            NavigationService.Navigate(new OnlineMultiplayer(setting));
         }
 
     }
