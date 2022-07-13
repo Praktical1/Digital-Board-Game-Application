@@ -10,7 +10,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO;
 using System.Windows.Shapes;
@@ -38,6 +37,7 @@ namespace FinalProject.Pages
             {
                 ForceCapture.Background = Brushes.Green;
             }
+            Online.Content = "Online - Logged in as " + setting.userId;
         }
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {

@@ -36,7 +36,7 @@ namespace FinalProject
                 setting.style = settingsParts[1];
                 setting.userId = settingsParts[2];
                 Background.Source = new BitmapImage(new Uri(@setting.background, UriKind.Relative));
-            } Exception e;
+            };
             Main.Content = new MainMenu(setting);
         }
     }

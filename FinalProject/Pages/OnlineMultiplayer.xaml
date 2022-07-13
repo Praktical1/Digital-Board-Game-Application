@@ -9,6 +9,143 @@
       Title="OnlineMultiplayer">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+            <Style x:Key="TextBoxGlow" TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="0"
+                                   To="1" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="1"
+                                   To="0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <Label Grid.Column="1" Content="Settings" FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" />
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="#66f0fff0" Padding="10">
+            <StackPanel>
+                <Label x:Name="Online" Content="Online" Margin="60 0 0 0" FontSize="40" />
+                <Separator/>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnRegister" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock Text="Register">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLogin" FontSize="30" Padding="50 0 0 0" >
+                    <TextBlock Text="Login">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Separator />
+                <Label Content="Checkers rules" Margin="60 0 0 0" FontSize="40" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnForcedCaptureRule" FontSize="30" Padding="50 0 0 0" >
+                        <TextBlock Text="ForceCapture Rule (Default = ON)">
+                            <TextBlock.Effect>
+                                <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button x:Name="ForceCapture" Grid.Column="1" Background="Red" Click="BtnForcedCaptureRule"/>
+                </Grid>
+                <Separator/>
+                <Label Content="Background" Margin="60 0 0 0" FontSize="40" />
+                <StackPanel Orientation="Horizontal">
+                    <Grid x:Name="Default" Height="250" Background="Green">
+                        <Image Source="../Images/Background.png" Margin="10" />
+                        <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="ChangeBackgroundtoDefault" FontSize="100"   HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <TextBlock Text="Default">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="Cool" Height="250" Background="#00FFFFFF">
+                        <Image Source="../Images/CoolBackground.png" Margin="10"/>
+                        <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="ChangeBackgroundtoCool" FontSize="100"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <TextBlock Text="Cool">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnMainMenu" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
+            <TextBlock Text="Back To Menu">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Page>

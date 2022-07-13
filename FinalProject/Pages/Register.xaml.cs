@@ -25,12 +25,13 @@ namespace FinalProject.Pages
         private IConfiguration Configuration;
         private SqlConnection connect;
         private Settings setting;
+        private List<String[]> loginDatabase = new List<String[]>();
         public Register(Settings setting)
         {
             this.setting = setting;
             InitializeComponent();
             GetConnect();
-            SQLOperation();
+
         }
 
         public void GetConnect()
@@ -44,27 +45,42 @@ namespace FinalProject.Pages
             connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
         }
 
-        public void SQLOperation()
+        public void GetLoginDatabase()
         {
-            connect.Open();
-            MessageBox.Show("Connection Open  !");
-
-            SqlCommand command;
-            SqlDataReader dataReader;
-            String sql, Output = "";
-
-            sql = "Select Username,Password from loginDatabase";
-
-            command = new SqlCommand(sql, connect);
-            dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
+            try
             {
-                Output = Output + dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + "\n";
-            }
+                connect.Open();
+                Trace.WriteLine("Connection Open");
 
-            MessageBox.Show(Output);
-            connect.Close();
+                SqlCommand command;
+                SqlDataReader dataReader;
+                String sql, Output = "";
+
+                sql = "Select Username,Password from loginDatabase";
+
+                command = new SqlCommand(sql, connect);
+                try
+                {
+                    dataReader = command.ExecuteReader();
+                }
+                catch
+                {
+                    sql = "CREATE TABLE [dbo].[loginDatabase]([Username] [text] NOT NULL , [Password] [text] NOT NULL)";
+                    command = new SqlCommand(sql, connect);
+                    command.ExecuteNonQuery();
+                    sql = "Select Username,Password from loginDatabase";
+                    command = new SqlCommand(sql, connect);
+                    dataReader = command.ExecuteReader();
+                }
+
+                while (dataReader.Read())
+                {
+                    string a = dataReader.GetValue(0).ToString();
+                    String b = dataReader.GetValue(1).ToString();
+                    loginDatabase.Add(new string[2] { a, b });
+                }
+                connect.Close();
+            } catch { MessageBox.Show("Failed to connect to database"); NavigationService.Navigate(new SettingsPage(setting)); }
         }
 
         private void BtnSignUp(object sender, RoutedEventArgs x)
@@ -72,43 +88,46 @@ namespace FinalProject.Pages
             String? username = user.Text;
             String? password = pass.Text;
             String? passwordConfirm = confirm_pass.Text;
-            Boolean found = false;
             SqlCommand command;
-            string sql = "Insert [dbo].[loginDatabase] ([Username],[Password]) VALUES ('" + username + "','" + password + "')";
-            connect.Open();
-            command = new SqlCommand(sql, connect);
-            command.ExecuteNonQuery();
-            MessageBox.Show("Registered User");
-            connect.Close();
-            NavigationService.Navigate(new SettingsPage(setting));
-            //if (username != null && password != null)     //Confirms username and password is not null
-            //{
-            //    if (password.Equals(passwordConfirm))
-            //    {
-            //        for (int i = 0; i < loginInfo.Count; i += 2)
-            //        {
-            //            if (loginInfo[i].Equals(username))
-            //            {
-            //                MessageBox.Show("Please try a different username");
-            //                found = true;
-            //            }
-            //        }
-            //        if (!found)
-            //        {
-            //            loginInfo.Add(username);         //adds user to login list
-            //            loginInfo.Add(password);
-            //            MessageBox.Show("Account Registered");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("The two passwords do not match");
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Make sure you have entered a username and password");
-            //}
+
+            if (username != null && password != null)     //Confirms username and password is not null
+            {
+                if (password.Equals(passwordConfirm))
+                {
+                    GetLoginDatabase();
+                    Boolean found = false;
+                    for (int i = 0; i < loginDatabase.Count; i ++)
+                    {
+                        if (loginDatabase[i][0].Equals(username))
+                        {
+                            MessageBox.Show("Please try a different username");
+                            found = true;
+                        }
+                    }
+                    if (!found)
+                    {
+                        string sql = "Insert [dbo].[loginDatabase] ([Username],[Password]) VALUES ('" + username + "','" + password + "')";
+                        command = new SqlCommand(sql, connect);
+                        try
+                        {
+                            connect.Open();
+                            command.ExecuteNonQuery();
+                            MessageBox.Show("Registered User");
+                            connect.Close();
+                            setting.userId = username;
+                        } catch { MessageBox.Show("Failed to register user to database"); }
+                        NavigationService.Navigate(new SettingsPage(setting));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("The two passwords do not match");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Make sure you have entered a username and password");
+            }
         }
     }
 }

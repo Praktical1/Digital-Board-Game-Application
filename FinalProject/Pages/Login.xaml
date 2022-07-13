@@ -55,16 +55,16 @@
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" >
             <Label Content="Login Screen" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#5b0000" />
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1" Background="Honeydew">
+        <Grid Grid.Row="1" Grid.Column="1" Background="#66f0fff0">
             <Label Content="Username:" FontSize="30" VerticalAlignment="Center" Foreground="#5b0000" />
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="2" Background="Honeydew">
+        <Grid Grid.Row="1" Grid.Column="2" Background="#66f0fff0">
             <TextBox x:Name="user" Margin="15"  Padding="5" FontSize="40" />
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="1" Background="Honeydew">
+        <Grid Grid.Row="2" Grid.Column="1" Background="#66f0fff0">
             <Label Content="Password:" FontSize="30" VerticalAlignment="Center" Foreground="#5b0000" />
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="2" Background="Honeydew">
+        <Grid Grid.Row="2" Grid.Column="2" Background="#66f0fff0">
             <TextBox x:Name="pass" Margin="15" Padding="5" FontSize="40" />
         </Grid>
         <Button Background="#01000000" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" FontSize="60"  BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" HorizontalAlignment="Center" Click="BtnLogin">
