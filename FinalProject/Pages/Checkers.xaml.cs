@@ -443,10 +443,7 @@ namespace FinalProject.Pages
         {
             int timeoutCounter = 0;
             while (!yourTurn) {
-                
                 await Task.Delay(1000);
-
-
                 SqlCommand command;
                 SqlDataReader dataReader;
                 String sql, Output = "";
