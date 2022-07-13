@@ -447,6 +447,7 @@ namespace FinalProject.Pages
                 SqlDataReader dataReader;
                 String sql, Output = "";
                 sql = "Select Username,Password from " + Lobby;
+                string connectionString="";
                 connect = new SqlConnection(connectionString);
                 command = new SqlCommand(sql, connect);
                 dataReader = command.ExecuteReader();
@@ -458,12 +459,12 @@ namespace FinalProject.Pages
                     Output = dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + "\n";
                 }
 
-                if (timeoutCounter = 3)
+                if (timeoutCounter == 3)
                 {
-                    MessageBox.Show("Conection")
+                    MessageBox.Show("Conection");
                 }
 
-                if (timeoutCounter = 20)
+                if (timeoutCounter == 20)
                 {
 
                 }

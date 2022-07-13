@@ -30,6 +30,7 @@ namespace FinalProject.Pages
             this.setting = setting;
             InitializeComponent();
             GetConnect();
+            SQLOperation();
         }
 
         public void GetConnect()
@@ -71,7 +72,14 @@ namespace FinalProject.Pages
             String? username = user.Text;
             String? password = pass.Text;
             String? passwordConfirm = confirm_pass.Text;
-            Boolean found = false;      
+            Boolean found = false;
+            SqlCommand command;
+            string sql = "Insert [dbo].[loginDatabase] ([Username],[Password]) VALUES ('" + username + "','" + password + "')";
+            connect.Open();
+            command = new SqlCommand(sql, connect);
+            command.ExecuteNonQuery();
+            MessageBox.Show("Registered User");
+            connect.Close();
             NavigationService.Navigate(new SettingsPage(setting));
             //if (username != null && password != null)     //Confirms username and password is not null
             //{
