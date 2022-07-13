@@ -45,6 +45,8 @@
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
+        
+
         <!--Hint-->
         <TextBlock Grid.Column="2" Text="To Surrender - spam click your unit to reveal surrender button" TextWrapping="Wrap" Foreground="White"/>
         <!--Main Menu Button-->
@@ -450,6 +452,11 @@
                 </Grid>
             </Grid>
         </Grid>
+
+        <!--Multiplayer ping service start button-->
+        <Button x:Name="StartPing" Grid.RowSpan="3" Grid.ColumnSpan="3" Content="Click to Start" FontSize="120" Click="BtnPingService" Background="DarkGray" Visibility="Hidden"/>
+        
+        <!--End Game Screen-->
         <Grid x:Name="EndScreen" Grid.RowSpan="3" Grid.ColumnSpan="3" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition/>

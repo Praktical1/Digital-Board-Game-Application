@@ -52,10 +52,11 @@
 
 
         <StackPanel Grid.Row="1" Grid.Column="1" Background="#66f0fff0">
-            <Label x:Name="Player1" Content="Player1" Margin="60 0 0 0"  Padding="10" FontSize="40" />
-            <Label x:Name="Player2" Content="Player2" Margin="60 0 0 0"  Padding="10" FontSize="40" Visibility="Hidden"/>
+            <Label x:Name="Player1" Content="Player1" Margin="60 0 0 0"  Padding="10" FontSize="80" />
+            <Label x:Name="Player2" Content="Player2" Margin="60 0 0 0"  Padding="10" FontSize="80" Visibility="Hidden"/>
             
         </StackPanel>
+        <Label x:Name="Countdown" Grid.Row="1" Grid.Column="1" FontSize="250" Content="3" HorizontalAlignment="Center" Background="#66f0fff0" />
         <Grid  Grid.Row="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -77,5 +78,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <!--Multiplayer ping service start button-->
+        <Button x:Name="StartPing" Grid.RowSpan="4" Grid.ColumnSpan="3" Content="Click to Enter Lobby" FontSize="100" Click="BtnPingService" Background="DarkGray" Visibility="Visible"/>
     </Grid>
 </Page>
