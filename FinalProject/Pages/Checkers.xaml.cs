@@ -508,7 +508,7 @@ namespace FinalProject.Pages
                             sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
                             command = new SqlCommand(sql, connect);
                             command.ExecuteNonQuery();
-                        } catch { Trace.WriteLine("Failed to delete old moves")}
+                        } catch { Trace.WriteLine("Failed to delete old moves"); }
                         connect.Close();
                     } catch { Trace.WriteLine("Failed to obtain database data"); }
                 }
