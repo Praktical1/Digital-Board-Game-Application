@@ -490,8 +490,8 @@ namespace FinalProject.Pages
                     {
                         opponent = 1;
                     }
-                    try
-                    {
+                    //try
+                    //{
                         connect.Open();
                         sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
                         command = new SqlCommand(sql, connect);
@@ -513,11 +513,11 @@ namespace FinalProject.Pages
                                 sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
                                 command = new SqlCommand(sql, connect);
                                 command.ExecuteNonQuery();
-                                connect.Close();
                             }
                             catch { Trace.WriteLine("Failed to delete old moves"); }
                         }
-                    } catch { Trace.WriteLine("Failed to obtain database data"); }
+                        connect.Close();
+                    //} catch { Trace.WriteLine("Failed to obtain database data"); }
                 }
                 await Task.Delay(1000);
             }
