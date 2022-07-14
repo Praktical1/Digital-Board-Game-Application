@@ -161,16 +161,12 @@ namespace FinalProject.Pages
                 }
             }
             if (!jump)
-            {
-                ForcedMove(side);
-            }
+            { ForcedMove(side); }
 
             //online side switch
             move = 0;
             if (!yourTurn && online)
-            {
-                ClearButtons();
-            }
+            { ClearButtons(); }
         }
 
         //Responsible for Pawn movement
@@ -187,7 +183,7 @@ namespace FinalProject.Pages
             }
             if (piece[0] == "B")
             {
-                //Attack movement
+                //Attack movement - Black
                 try
                 {
                     if (Board[index[0] - 1, index[1] - 1][0] == "R" && Board[index[0] - 2, index[1] - 2][0] == " ")
@@ -206,7 +202,7 @@ namespace FinalProject.Pages
                     }
                 }
                 catch { Trace.WriteLine("Exception B1 attack right"); }
-                //Normal movement
+                //Normal movement - Black
                 if (!jump && !buttons)
                 {
                     try
@@ -231,7 +227,7 @@ namespace FinalProject.Pages
                     catch { Trace.WriteLine("Exception B1 move left"); }
                 }
             } else if (piece[0] == "R") {
-                //Attack Movement
+                //Attack Movement - Red
                 try
                 {
                     if (Board[index[0] + 1, index[1] - 1][0] == "B" && Board[index[0] + 2, index[1] - 2][0] == " ")
@@ -249,7 +245,7 @@ namespace FinalProject.Pages
                         buttons = true;
                     }
                 } catch { Trace.WriteLine("Exception R1 attack right"); }
-                //Normal movement
+                //Normal movement - Red
                 if (!jump && !buttons)
                 {
                     try
@@ -272,10 +268,10 @@ namespace FinalProject.Pages
                     } catch { Trace.WriteLine("Exception R1 move right"); }
                 }
             }
+            //If movement 
             if (!buttons && jump)
             {
                 selected = new string[3];
-                Trace.WriteLine("Cleared piece: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
                 Trace.WriteLine("no possible routes found");
                 jump = false;
                 endJump = true;
@@ -287,14 +283,13 @@ namespace FinalProject.Pages
                 {
                     Turn("R");
                 }
-                Trace.WriteLine("Stored piece post jump: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
             }
         }
 
         //Responsible for King movement
         private void King(String grid)
         {
-            //change grid to index on board array
+            //Change grid to index on board array
             int[] index = new int[] { Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString()) };
             string[] piece = Board[index[0], index[1]];
             Boolean buttons = false;
@@ -625,7 +620,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for returning image string based on unit colour and type
+        // Responsible for returning image string based on unit colour and type
         private string ImageSelector(string colour, string type)
         {
             switch (colour)
@@ -653,7 +648,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for clearing all the buttons on the board
+        // Responsible for clearing all the buttons on the board
         private void ClearButtons()
         {
             foreach (object container in ButtonContainer.Children)
@@ -667,7 +662,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responbile for selecting a unit and showing appropiate actions for the unit
+        // Responbile for selecting a unit and showing appropiate actions for the unit
         private void ChooseSelection(String grid, string[] temp)
         {
             Trace.WriteLine("Selecting: " + grid);                                      //To select a unit
@@ -692,7 +687,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for clearing selection and allowing player to choose another unit instead
+        // Responsible for clearing selection and allowing player to choose another unit instead
         private void ClearSelection(String grid, string[] temp)
         {
             Trace.WriteLine("Deselected: " + grid);
@@ -709,7 +704,7 @@ namespace FinalProject.Pages
             Trace.WriteLine("Cleared selected");
         }
 
-        //Responsible for moving unit and also removing captured units from the board as well as determining if player continues turn (as a unit can capture more than once in a player turn)
+        // Responsible for moving unit and also removing captured units from the board as well as determining if player continues turn (as a unit can capture more than once in a player turn)
         private void MoveSelection(String grid, string[] temp)
         {
             Trace.WriteLine("Changing to selected: " + grid);
@@ -785,6 +780,7 @@ namespace FinalProject.Pages
             UpgradeToKing();
         }
 
+        // If forcedmove ruleset on (on by default) ensures if your unit can capture in your turn you must capture
         private void ForcedMove(String side)
         {
             if (setting.forcedMove)
