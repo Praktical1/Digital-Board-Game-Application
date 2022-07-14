@@ -429,7 +429,7 @@ namespace FinalProject.Pages
                 }
                 try
                 {
-                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}], [Player{2}]) VALUES (3, '{2}')", lobbyId, player, opponent, grid);
+                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}], [Player{2}]) VALUES (3, '{2}', 'well')", lobbyId, player, opponent, grid);
                 } catch { Trace.WriteLine("Failed to send move"); }
                 move++;
             }
