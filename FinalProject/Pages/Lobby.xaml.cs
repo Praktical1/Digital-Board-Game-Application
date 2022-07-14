@@ -352,7 +352,7 @@ namespace FinalProject.Pages
         }
 
         //Refresh
-        public void BtnReady(object sender, RoutedEventArgs e)
+        public void BtnRefresh(object sender, RoutedEventArgs e)
         {
             PlayerReady();
         }
