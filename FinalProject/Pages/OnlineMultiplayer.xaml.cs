@@ -316,7 +316,7 @@ namespace FinalProject.Pages
             {
                 connect.Open();
                 command.ExecuteNonQuery(); 
-                sql = "CREATE TABLE [dbo].[" + lobbyId + "]([ID] [int] NOT NULL,[Player1] [text] NULL,[Player2] [text] NULL)";
+                sql = String.Format("CREATE TABLE [dbo].[{0}]([ID] [int] NOT NULL,[Player1] [text] NULL,[Player2] [text] NULL)",lobbyId);
                 command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
                 connect.Close();

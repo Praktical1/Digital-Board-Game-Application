@@ -61,12 +61,12 @@ namespace FinalProject.Pages
             try
             {
                 connect.Open();
-                string sql = "Insert [dbo].[" + lobbyId + "] ([ID], [Player1], [Player2]) VALUES (1, '"+ setting.userId + "', 'Unknown')";
+                string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player1], [Player2]) VALUES (1, '{1}', 'Unknown')", lobbyId, setting.userId);
                 SqlCommand command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
-                sql = "Insert [dbo].[" + lobbyId + "] ([ID], [Player1], [Player2]) VALUES (2, 'waiting', 'waiting')";
-                command.ExecuteNonQuery();
+                sql = String.Format("Insert [dbo].[{0}] ([ID], [Player1], [Player2]) VALUES (2, 'waiting', 'waiting')", lobbyId);
                 command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
                 connect.Close();
             }
             catch { Trace.WriteLine("Failed to initialise"); connect.Close(); }
@@ -80,7 +80,11 @@ namespace FinalProject.Pages
                 try
                 {
                     SqlCommand command;
+                    SqlDataReader reader;
                     int opponent = 0;
+                    String[] output = new string[2];
+
+                    connect.Open();
                     if (player == 1)
                     {
                         opponent = 2;
@@ -93,24 +97,27 @@ namespace FinalProject.Pages
                             command = new SqlCommand("Update [dbo].[" + lobbyId + "] SET Player2 = '" + setting.userId + "' WHERE ID=1", connect);
                             command.ExecuteNonQuery();
                         }
-                        catch { }
+                        catch { Trace.WriteLine("Updater Broke"); }
                     }
+                    connect.Close();
 
-                    String sql = "Select Player" + opponent + " from [dbo].[" + lobbyId + "]";
-                    Trace.WriteLine(sql);
-                    command = new SqlCommand(sql, connect);
                     connect.Open();
-                    String[] output = new string[2];
-                    SqlDataReader reader = command.ExecuteReader();
-                    int count = 0;
+                    String sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=1", opponent, lobbyId);
+                    command = new SqlCommand(sql, connect);
+                    reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        output[count] = (reader.GetValue(0).ToString());
-                        count++;
+                        output[0] = reader.GetValue(0).ToString();
                     }
-                    Trace.WriteLine(output[0]);
-                    Trace.WriteLine(output[1]);
-
+                    connect.Close();
+                    connect.Open();
+                    sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=2", opponent, lobbyId);
+                    command = new SqlCommand(sql, connect);
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        output[1] = reader.GetValue(0).ToString();
+                    }
                     connect.Close();
                     if (player == 1)
                     {
@@ -162,6 +169,7 @@ namespace FinalProject.Pages
                         break;
                     case 4:
                         Countdown.Content = "0";
+                        ping = false;
                         break;
                 }
                 await Task.Delay(1000);
@@ -329,6 +337,7 @@ namespace FinalProject.Pages
             {
                 CreateLobbyListing();
             }
+            ping = false;
         }
 
         //For starting ping service
