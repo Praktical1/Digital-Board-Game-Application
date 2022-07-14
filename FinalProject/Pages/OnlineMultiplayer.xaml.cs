@@ -28,7 +28,7 @@ namespace FinalProject.Pages
         private Settings setting;
         private IConfiguration Configuration;
         private SqlConnection connect;
-        private List<string[]> lobbies = new List<string[]>();
+        private List<string[]> lobbies;
 
         public OnlineMultiplayer(Settings setting)
         {
@@ -54,7 +54,7 @@ namespace FinalProject.Pages
             try
             {
                 connect.Open();
-
+                lobbies = new List<string[]>();
                 SqlCommand command;
                 SqlDataReader dataReader;
                 String sql = "";
