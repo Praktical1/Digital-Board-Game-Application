@@ -478,6 +478,7 @@ namespace FinalProject.Pages
             {
                 if (!yourTurn)
                 {
+                    Trace.WriteLine("not your turn");
                     SqlCommand command;
                     SqlDataReader dataReader;
                     String sql, Output = "";
@@ -500,8 +501,8 @@ namespace FinalProject.Pages
                         while (dataReader.Read())
                         {
                             choice = dataReader.GetValue(0).ToString();
-                            Select(choice);
                             Trace.WriteLine("this is opponents move: " + choice);
+                            Select(choice);
                         }
                         connect.Close();
                         connect.Open();
