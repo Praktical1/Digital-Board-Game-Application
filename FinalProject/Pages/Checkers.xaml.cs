@@ -501,7 +501,6 @@ namespace FinalProject.Pages
                             string choice = dataReader.GetValue(0).ToString();
                             Select(choice);
                             Trace.WriteLine(choice);
-                            await Task.Delay(200);
                         }
                         connect.Close();
                         connect.Open();
