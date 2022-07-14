@@ -496,17 +496,13 @@ namespace FinalProject.Pages
                         command = new SqlCommand(sql, connect);
                         dataReader = command.ExecuteReader();
                     } catch { Trace.WriteLine("Failed to obtain database data"); }
-                    
-
-                    
-                    await Task.Delay(1000);
                 }
                 else
                 {
 
                 }
+                await Task.Delay(1000);
             }
-            await Task.Delay(1000);
         }
 
         //Responsible for upgrading pawn to king when conditions met
@@ -871,8 +867,8 @@ namespace FinalProject.Pages
         //For starting ping service (online multiplayer only)
         private void BtnPingService(object sender, RoutedEventArgs x)
         {
-            PingService();
             StartPing.Visibility = Visibility.Hidden;
+            PingService();
         }
 
         //For returning to Menu
