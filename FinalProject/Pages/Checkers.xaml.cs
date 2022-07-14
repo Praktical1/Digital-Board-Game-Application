@@ -26,14 +26,14 @@ namespace FinalProject.Pages
         private Settings setting;
         private IConfiguration Configuration;
         private SqlConnection connect;
+        private string lobbyId = "";
         private Boolean online = false;
         private Boolean yourTurn = true;
         private Boolean jump = false;
         private Boolean endJump = false;
         private int surrenderCounter = 0;
-        private string lobbyId = "";
         private int player = 0;
-        private int move;
+        private int timeOut; //to be used as part of timeout if implemented
 
         //Multi-dimensional jagged array to hold information of all checker pieces
         String[,][] Board = new String[8, 8][] {
@@ -119,13 +119,6 @@ namespace FinalProject.Pages
             }
         }
 
-        //Code store - button.Background = new BrushConverter().ConvertFromString("#4CFF33") as SolidColorBrush;
-        //Green - #00FF00
-        //Yellow - #FFFF00
-        //Blue - #0000FF
-        //Red - #FF0000
-        //White - #FFFFFF
-
         //Responsible for a new turn
         private void Turn(String side)
         {
@@ -164,7 +157,7 @@ namespace FinalProject.Pages
             { ForcedMove(side); }
 
             //online side switch
-            move = 0;
+            timeOut = 0;
             if (!yourTurn && online)
             { ClearButtons(); }
         }
@@ -435,7 +428,7 @@ namespace FinalProject.Pages
                     command.ExecuteNonQuery();
                     connect.Close();
                 } catch { Trace.WriteLine("Failed to send move"); }
-                move++;
+                timeOut++;
             }
             string[] temp = Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())];
             Trace.WriteLine(StringToNum(grid[0].ToString()) + ", " + (Int32.Parse(grid[1].ToString()) - 1));
@@ -476,79 +469,6 @@ namespace FinalProject.Pages
             Trace.WriteLine("Stored piece: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
         }
 
-        //Used to connect to SQL server
-        public void GetConnect()
-        {
-            var builder = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
-             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            Configuration = builder.Build();
-
-            connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
-        }
-
-        //Responsible for receiving moves of player
-        private async void PingService()
-        {
-            int timeoutCounter = 0;
-            while (online)
-            {
-                if (!yourTurn)
-                {
-                    SqlCommand command;
-                    SqlDataReader dataReader;
-                    String sql, Output = "";
-                    int opponent = 0;
-                    if (player == 1)
-                    {
-                        opponent = 2;
-                    }
-                    else
-                    {
-                        opponent = 1;
-                    }
-                    try
-                    {
-                        if (connect.State != ConnectionState.Open) { connect.Open(); }
-                        sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
-                        command = new SqlCommand(sql, connect);
-                        dataReader = command.ExecuteReader();
-                        List<string> choice = new List<string>();
-                        while (dataReader.Read())
-                        {
-                            if (dataReader.GetValue(0).ToString() != "")
-                            {
-
-                                choice.Add(dataReader.GetValue(0).ToString());
-                            }
-                        }
-                        choice.Add("STOP");
-                        connect.Close();
-                        if (connect.State != ConnectionState.Open) { connect.Open(); }
-                        if (choice[0] != "STOP")
-                        {
-                            try
-                            {
-                                Trace.WriteLine("deleting old entry");
-                                sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
-                                command = new SqlCommand(sql, connect);
-                                command.ExecuteNonQuery();
-                                for(int i = 0; i < (choice.Count-1); i++)
-                                {
-                                    Trace.WriteLine("Opponent moves to: " + choice[i]);
-                                    Select(choice[i]);
-                                    await Task.Delay(300);
-                                }
-                            }
-                            catch { Trace.WriteLine("Failed to delete old moves"); }
-                        }
-                        connect.Close();
-                    } catch { Trace.WriteLine("Failed to obtain database data"); try { connect.Close(); } catch { }; }
-                }
-                await Task.Delay(1000);
-            }
-        }
 
         //Responsible for upgrading pawn to king when conditions met
         private void UpgradeToKing()
@@ -914,21 +834,97 @@ namespace FinalProject.Pages
             } catch { Trace.WriteLine("Button show 2 exception"); }
         }
 
-        //For starting ping service (online multiplayer only)
+        // Multiplayer Functionality
+        //
+        // Used to connect to SQL server
+        public void GetConnect()
+        {
+            var builder = new ConfigurationBuilder()
+             .SetBasePath(Directory.GetCurrentDirectory())
+             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            Configuration = builder.Build();
+
+            connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
+        }
+
+        // Responsible for receiving moves of player
+        private async void PingService()
+        {
+            int timeoutCounter = 0;
+            while (online)
+            {
+                if (!yourTurn)
+                {
+                    SqlCommand command;
+                    SqlDataReader dataReader;
+                    String sql, Output = "";
+                    int opponent = 0;
+                    if (player == 1)
+                    {
+                        opponent = 2;
+                    }
+                    else
+                    {
+                        opponent = 1;
+                    }
+                    try
+                    {
+                        if (connect.State != ConnectionState.Open) { connect.Open(); }
+                        sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
+                        command = new SqlCommand(sql, connect);
+                        dataReader = command.ExecuteReader();
+                        List<string> choice = new List<string>();
+                        while (dataReader.Read())
+                        {
+                            if (dataReader.GetValue(0).ToString() != "")
+                            {
+                                choice.Add(dataReader.GetValue(0).ToString());
+                            }
+                        }
+                        choice.Add("STOP");
+                        connect.Close();
+                        if (connect.State != ConnectionState.Open) { connect.Open(); }
+                        if (choice[0] != "STOP")
+                        {
+                            try
+                            {
+                                Trace.WriteLine("deleting old entry");
+                                sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
+                                command = new SqlCommand(sql, connect);
+                                command.ExecuteNonQuery();
+                                for (int i = 0; i < (choice.Count - 1); i++)
+                                {
+                                    Trace.WriteLine("Opponent moves to: " + choice[i]);
+                                    Select(choice[i]);
+                                    await Task.Delay(300);
+                                }
+                            }
+                            catch { Trace.WriteLine("Failed to delete old moves"); }
+                        }
+                        connect.Close();
+                    }
+                    catch { Trace.WriteLine("Failed to obtain database data"); try { connect.Close(); } catch { }; }
+                }
+                await Task.Delay(1000);
+            }
+        }
+
+        // For starting ping service (online multiplayer only)
         private void BtnPingService(object sender, RoutedEventArgs x)
         {
             StartPing.Visibility = Visibility.Hidden;
             PingService();
         }
 
-        //For returning to Menu
+        // For returning to Menu
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {
             online = false;
             NavigationService.Navigate(new MainMenu(setting));
         }
 
-        //Surrender Buttons
+        // Surrender Buttons
         private void BtnBlackSurrender(object sender, RoutedEventArgs x) {
             EndScreen.Visibility = Visibility.Visible;
             RedWon.Visibility = Visibility.Visible;
@@ -939,7 +935,7 @@ namespace FinalProject.Pages
             BlackWon.Visibility = Visibility.Visible;
         }
 
-        //Listeners responsible for the buttons on the board
+        // Listeners responsible for the buttons on the board
         private void Button_A1(object sender, RoutedEventArgs e)
         {
             Select("A1");
