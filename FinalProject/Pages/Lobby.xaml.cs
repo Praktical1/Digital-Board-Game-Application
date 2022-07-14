@@ -29,7 +29,7 @@ namespace FinalProject.Pages
     {
         private Settings setting;
         private string lobbyId;
-        int player;
+        private int player;
         private IConfiguration Configuration;
         private SqlConnection connect;
         private Boolean ready = false;
@@ -37,12 +37,13 @@ namespace FinalProject.Pages
         private Boolean otherReady = false;
         private Boolean ping = false;
         private int counter = 0;
-        public Lobby(Settings setting, string lobbyId, int player, string hostName)
+        private String sql;
+        public Lobby(Settings setting, string lobbyId, string hostName)
         {
             InitializeComponent();
             this.setting = setting;
             this.lobbyId = lobbyId;
-            this.player = player;
+            this.player = 2;
             this.hostName = hostName;
             Player1.Content = hostName;
             Player2.Content = setting.userId;
@@ -50,12 +51,12 @@ namespace FinalProject.Pages
             GetConnect();
         }
         
-        public Lobby(Settings setting, string lobbyId, int player)
+        public Lobby(Settings setting, string lobbyId)
         {
             InitializeComponent();
             this.setting = setting;
             this.lobbyId = lobbyId;
-            this.player = player;
+            this.player = 1;
             Player1.Content = setting.userId;
             StartPing.Visibility = Visibility.Visible;
             GetConnect();
@@ -96,7 +97,8 @@ namespace FinalProject.Pages
                         opponent = 1; 
                         try
                         {
-                            command = new SqlCommand("Update [dbo].[" + lobbyId + "] SET Player2 = '" + setting.userId + "' WHERE ID=1", connect);
+                            sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = '{1}' WHERE ID=1", lobbyId, setting.userId);
+                            command = new SqlCommand(sql, connect);
                             command.ExecuteNonQuery();
                         }
                         catch { Trace.WriteLine("Updater Broke"); }
@@ -104,7 +106,7 @@ namespace FinalProject.Pages
                     connect.Close();
 
                     connect.Open();
-                    String sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=1", opponent, lobbyId);
+                    sql = String.Format("SELECT Player{0} FROM [dbo].[{1}] WHERE ID=1", opponent, lobbyId);
                     command = new SqlCommand(sql, connect);
                     reader = command.ExecuteReader();
                     while (reader.Read())
@@ -113,7 +115,7 @@ namespace FinalProject.Pages
                     }
                     connect.Close();
                     connect.Open();
-                    sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=2", opponent, lobbyId);
+                    sql = String.Format("SELECT Player{0} FROM [dbo].[{1}] WHERE ID=2", opponent, lobbyId);
                     command = new SqlCommand(sql, connect);
                     reader = command.ExecuteReader();
                     while (reader.Read())
@@ -182,7 +184,7 @@ namespace FinalProject.Pages
                     ready = false;
                     try { 
                         connect.Open();
-                        string sql = "Update [dbo].[" + lobbyId + "] SET Player1 = 'waiting' WHERE ID=2";
+                        sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'waiting' WHERE ID=2", lobbyId);
                         command = new SqlCommand(sql, connect);
                         command.ExecuteNonQuery();
                         connect.Close();
@@ -194,7 +196,7 @@ namespace FinalProject.Pages
                     Ready.Background = Brushes.Green;
                     Player1.Background = Brushes.Green;
                     ready = true;
-                    string sql = "Update [dbo].["+lobbyId+"] SET Player1 = 'Ready' WHERE ID=2";
+                    sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Ready' WHERE ID=2", lobbyId);
                     command =new SqlCommand(sql,connect);
                     try
                     {
@@ -223,7 +225,7 @@ namespace FinalProject.Pages
                     try
                     {
                         connect.Open();
-                        string sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'waiting' WHERE ID=2";
+                        string sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = 'waiting' WHERE ID=2", lobbyId);
                         command = new SqlCommand(sql, connect);
                         command.ExecuteNonQuery();
                         connect.Close();
@@ -235,7 +237,7 @@ namespace FinalProject.Pages
                     Ready.Background = Brushes.Green;
                     Player2.Background = Brushes.Green;
                     ready = true;
-                    string sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'Ready' WHERE ID=2";
+                    string sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = 'Ready' WHERE ID=2", lobbyId);
                     command = new SqlCommand(sql, connect);
                     try
                     {
@@ -292,17 +294,15 @@ namespace FinalProject.Pages
 
         private void CloseLobby()
         {
-            string sql = "DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='" + lobbyId + "'";
+            sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
             SqlCommand command = new SqlCommand(sql, connect);
             try
             {
                 connect.Open();
-                Trace.WriteLine("Going to delete entries");
                 command.ExecuteNonQuery();
-                Trace.WriteLine("deleted entries");
+                Trace.WriteLine("deleted listing");
                 sql = "DROP TABLE [dbo].[" + lobbyId + "]";
                 command = new SqlCommand(sql, connect);
-                Trace.WriteLine("Going to delete table");
                 command.ExecuteNonQuery();
                 Trace.WriteLine("deleted table");
                 connect.Close();
@@ -320,10 +320,10 @@ namespace FinalProject.Pages
             try 
             { 
                 connect.Open();
-                string sql = "Insert [dbo].[lobbies] ([Lobby],[Host]) VALUES ('" + lobbyId + "','" + hostName + "')";
+                sql = String.Format("INSERT [dbo].[lobbies] ([Lobby],[Host]) VALUES ('{0}','{1}')", lobbyId, hostName);
                 SqlCommand command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
-                sql = "Update [dbo].[" + lobbyId + "] SET Player2 = 'waiting' WHERE ID=2";
+                sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = 'waiting' WHERE ID=2", lobbyId);
                 command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
                 connect.Close();

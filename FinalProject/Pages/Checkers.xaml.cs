@@ -1,4 +1,6 @@
 ﻿using FinalProject.Model;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -20,14 +22,17 @@ namespace FinalProject.Pages
 {
     public partial class Checkers : Page
     {
-        Settings setting;
+        private Settings setting;
+        private IConfiguration Configuration;
         private SqlConnection connect;
-        Boolean online = false;
-        Boolean yourTurn = true;
-        Boolean jump = false;
-        Boolean endJump = false;
-        int surrenderCounter = 0;
-        string Lobby = "";
+        private Boolean online = false;
+        private Boolean yourTurn = true;
+        private Boolean jump = false;
+        private Boolean endJump = false;
+        private int surrenderCounter = 0;
+        private string lobbyId = "";
+        private int player = 0;
+        private int move;
 
         //Multi-dimensional jagged array to hold information of all checker pieces
         String[,][] Board = new String[8, 8][] {
@@ -46,16 +51,17 @@ namespace FinalProject.Pages
         //Holds selected variable
         String[] selected = new string[3];
         
-        public Checkers(Settings setting, String Lobby, int player)
+        public Checkers(Settings setting, String lobbyId, int player)
         {
             this.setting = setting;
             online = true;
-            this.Lobby = Lobby;
+            this.lobbyId = lobbyId;
+            this.player = player;
             InitializeComponent();
+            GetConnect();
             StartPing.Visibility = Visibility.Visible;
             if (player == 2)
             {
-                yourTurn = false;
                 RedTurn.Content = "Your Turn (Red)";
                 BlackTurn.Content = "Opponents Turn (Black)";
                 RedWon.Content = "You've Won (Red wins)";
@@ -63,6 +69,7 @@ namespace FinalProject.Pages
             }
             else
             {
+                yourTurn = false;
                 RedTurn.Content = "Opponents Turn (Red)";
                 BlackTurn.Content = "Your Turn (Black)";
                 RedWon.Content = "You've Lost (Red wins)";
@@ -146,9 +153,18 @@ namespace FinalProject.Pages
             {
                 ForcedMove(side);
             }
-            if (!yourTurn)
+
+            //online side switch
+            if (yourTurn && online)
             {
                 ClearButtons();
+                move = 0;
+                yourTurn = false;
+            }
+            else if (online)
+            {
+                yourTurn = true;
+                move = 0;
             }
         }
 
@@ -266,7 +282,6 @@ namespace FinalProject.Pages
                 {
                     Turn("R");
                 }
-                yourTurn = false;
                 Trace.WriteLine("Stored piece post jump: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
             }
         }
@@ -297,41 +312,44 @@ namespace FinalProject.Pages
                 if (Board[index[0] - 1, index[1] - 1][0] == Enemy && Board[index[0] - 2, index[1] - 2][0] == " ")
                 {
                     string selection = NumToString(index[1] - 2) + (index[0] - 1).ToString() + "Select";
-                    ButtonShow(selection, "0000FF");
+                    ButtonShow(selection, "#0000FF");
                     buttons = true;
                 }
             }
             catch { Trace.WriteLine("Exception King attack bottom-left"); }
+            Trace.WriteLine(buttons);
             try
             {
                 if (Board[index[0] - 1, index[1] + 1][0] == Enemy && Board[index[0] - 2, index[1] + 2][0] == " ")
                 {
                     string selection = NumToString(index[1] + 2) + (index[0] - 1).ToString() + "Select";
-                    ButtonShow(selection, "0000FF");
+                    ButtonShow(selection, "#0000FF");
                     buttons = true;
                 }
             }
             catch { Trace.WriteLine("Exception King attack bottom-right"); }
+            Trace.WriteLine(buttons);
             try
             {
                 if (Board[index[0] + 1, index[1] - 1][0] == Enemy && Board[index[0] + 2, index[1] - 2][0] == " ")
                 {
                     string selection = NumToString(index[1] - 2) + (index[0] + 3).ToString() + "Select";
-                    ButtonShow(selection, "0000FF");
+                    ButtonShow(selection, "#0000FF");
                     buttons = true;
                 }
             }
             catch { Trace.WriteLine("Exception King attack top-left"); }
+            Trace.WriteLine(buttons);
             try
             {
                 if (Board[index[0] + 1, index[1] + 1][0] == Enemy && Board[index[0] + 2, index[1] + 2][0] == " ")
                 {
                     string selection = NumToString(index[1] + 2) + (index[0] + 3).ToString() + "Select";
-                    ButtonShow(selection, "0000FF");
+                    ButtonShow(selection, "#0000FF");
                     buttons = true;
                 }
             }
-            catch { Trace.WriteLine("Exception king attack top-right"); }
+            catch { Trace.WriteLine("Exception King attack top-right"); }
             //Normal movement
             if (!jump && !buttons)
             {
@@ -340,7 +358,7 @@ namespace FinalProject.Pages
                     if (Board[index[0] - 1, index[1] - 1][0] == " ")
                     {
                         string selection = NumToString(index[1] - 1) + (index[0]).ToString() + "Select";
-                        ButtonShow(selection, "FFFF00");
+                        ButtonShow(selection, "#FFFF00");
                         buttons = true;
                     }
                 }
@@ -350,7 +368,7 @@ namespace FinalProject.Pages
                     if (Board[index[0] - 1, index[1] + 1][0] == " ")
                     {
                         string selection = NumToString(index[1] + 1) + (index[0]).ToString() + "Select";
-                        ButtonShow(selection, "FFFF00");
+                        ButtonShow(selection, "#FFFF00");
                         buttons = true;
                     }
                 }
@@ -360,7 +378,7 @@ namespace FinalProject.Pages
                     if (Board[index[0] + 1, index[1] - 1][0] == " ")
                     {
                         string selection = NumToString(index[1] - 1) + (index[0] + 2).ToString() + "Select";
-                        ButtonShow(selection, "FFFF00");
+                        ButtonShow(selection, "#FFFF00");
                         buttons = true;
                     }
                 }
@@ -370,7 +388,7 @@ namespace FinalProject.Pages
                     if (Board[index[0] + 1, index[1] + 1][0] == " ")
                     {
                         string selection = NumToString(index[1] + 1) + (index[0] + 2).ToString() + "Select";
-                        ButtonShow(selection, "FFFF00");
+                        ButtonShow(selection, "#FFFF00");
                         buttons = true;
                     }
                 }
@@ -391,14 +409,21 @@ namespace FinalProject.Pages
                 {
                     Turn("R");
                 }
-                yourTurn = false;
                 Trace.WriteLine("Stored piece post jump: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
             }
         }
 
         //Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
-        private void Select(String grid)
+        private async void Select(String grid)
         {
+            if (online)
+            {
+                try
+                {
+
+                } catch { Trace.WriteLine("Failed to send move"); }
+                move++;
+            }
             string[] temp = Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())];
             Trace.WriteLine(StringToNum(grid[0].ToString()) + ", " + (Int32.Parse(grid[1].ToString()) - 1));
             string[] blank = new string[3];
@@ -414,7 +439,9 @@ namespace FinalProject.Pages
                 if (surrenderCounter > 3)
                 {
                     if (temp[0] == "B")
+                    {
                         BlackSurrender.Visibility = Visibility.Visible;
+                    }
                     else
                     {
                         RedSurrender.Visibility = Visibility.Visible;
@@ -428,49 +455,58 @@ namespace FinalProject.Pages
                 BlackSurrender.Visibility = Visibility.Hidden;
                 RedSurrender.Visibility = Visibility.Hidden;
             }
-            if (!yourTurn && online)
-            {
-                ClearButtons();
-            } else
-            {
-                yourTurn = true;
-            }
             Trace.WriteLine("Stored piece: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
         }
 
+        //Used to connect to SQL server
+        public void GetConnect()
+        {
+            var builder = new ConfigurationBuilder()
+             .SetBasePath(Directory.GetCurrentDirectory())
+             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            Configuration = builder.Build();
+
+            connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
+        }
+
         //Responsible for receiving moves of player
-        private async void onlinePlayer()
+        private async void PingService()
         {
             int timeoutCounter = 0;
-            while (!yourTurn) {
-                await Task.Delay(1000);
-                SqlCommand command;
-                SqlDataReader dataReader;
-                String sql, Output = "";
-                sql = "Select player2 from " + Lobby;
-                string connectionString="";
-                connect = new SqlConnection(connectionString);
-                command = new SqlCommand(sql, connect);
-                dataReader = command.ExecuteReader();
-
-                if (dataReader.Read())
+            while (online)
+            {
+                if (!yourTurn)
                 {
-                    timeoutCounter = 0;
+                    SqlCommand command;
+                    SqlDataReader dataReader;
+                    String sql, Output = "";
+                    int opponent = 0;
+                    if (player == 1)
+                    {
+                        opponent = 2;
+                    }
+                    else
+                    {
+                        opponent = 1;
+                    }
+                    try
+                    {
+                        sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=2", opponent, lobbyId);
+                        command = new SqlCommand(sql, connect);
+                        dataReader = command.ExecuteReader();
+                    } catch { Trace.WriteLine("Failed to obtain database data"); }
+                    
 
-                    Output = dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + "\n";
+                    
+                    await Task.Delay(1000);
                 }
-
-                if (timeoutCounter == 3)
+                else
                 {
-                    MessageBox.Show("Conection");
-                }
-
-                if (timeoutCounter == 20)
-                {
 
                 }
-                MessageBox.Show(Output);
             }
+            await Task.Delay(1000);
         }
 
         //Responsible for upgrading pawn to king when conditions met
@@ -690,7 +726,6 @@ namespace FinalProject.Pages
                 {
                     Turn("R");
                 }
-                yourTurn = false;
             }
             else
             {
@@ -743,8 +778,9 @@ namespace FinalProject.Pages
                                 catch { Trace.WriteLine("Forced pass 1 Left"); }
 
                             }
-                            else //Checks if Kings need to be forced
+                            else if (Board[i, j][1] == "2") //Checks if Kings need to be forced
                             {
+                                Trace.WriteLine("checking if King needs to be forced");
                                 try
                                 {
                                     if (Board[i + Modifier, j + 1][0] == Enemy && Board[i + Modifier * 2, j + 2][0] == " ")
@@ -797,39 +833,45 @@ namespace FinalProject.Pages
         }
         private void ButtonShow(String gridReference)
         {
-            foreach (object container in ButtonContainer.Children)
+            try
             {
-                var gridSelect = container as Grid;
-                foreach (Button button in gridSelect.Children)
+                foreach (object container in ButtonContainer.Children)
                 {
-                    if (button.Name == gridReference)
+                    var gridSelect = container as Grid;
+                    foreach (Button button in gridSelect.Children)
                     {
-                        button.Visibility = Visibility.Visible;
-                        button.Background = new BrushConverter().ConvertFromString("#FFFFFF") as SolidColorBrush;
+                        if (button.Name == gridReference)
+                        {
+                            button.Visibility = Visibility.Visible;
+                            button.Background = new BrushConverter().ConvertFromString("#FFFFFF") as SolidColorBrush;
+                        }
                     }
                 }
-            }
+            }catch { Trace.WriteLine("Button show exception"); }
         }
         private void ButtonShow(String gridReference, String colour)
         {
-            foreach (object container in ButtonContainer.Children)
+            try
             {
-                var gridSelect = container as Grid;
-                foreach (Button button in gridSelect.Children)
+                foreach (object container in ButtonContainer.Children)
                 {
-                    if (button.Name == gridReference)
+                    var gridSelect = container as Grid;
+                    foreach (Button button in gridSelect.Children)
                     {
-                        button.Visibility = Visibility.Visible;
-                        button.Background = new BrushConverter().ConvertFromString(colour) as SolidColorBrush;
+                        if (button.Name == gridReference)
+                        {
+                            button.Visibility = Visibility.Visible;
+                            button.Background = new BrushConverter().ConvertFromString(colour) as SolidColorBrush;
+                        }
                     }
                 }
-            }
+            } catch { Trace.WriteLine("Button show 2 exception"); }
         }
 
         //For starting ping service (online multiplayer only)
         private void BtnPingService(object sender, RoutedEventArgs x)
         {
-            //PingService();
+            PingService();
             StartPing.Visibility = Visibility.Hidden;
         }
 
@@ -849,6 +891,7 @@ namespace FinalProject.Pages
             EndScreen.Visibility = Visibility.Visible;
             BlackWon.Visibility = Visibility.Visible;
         }
+
         //Listeners responsible for the buttons on the board
         private void Button_A1(object sender, RoutedEventArgs e)
         {

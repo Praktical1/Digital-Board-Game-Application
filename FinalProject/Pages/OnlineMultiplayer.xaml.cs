@@ -54,14 +54,12 @@ namespace FinalProject.Pages
             try
             {
                 connect.Open();
-                Trace.WriteLine("Connection Open");
 
                 SqlCommand command;
                 SqlDataReader dataReader;
                 String sql = "";
 
                 sql = "Select Lobby,Host from lobbies";
-
                 command = new SqlCommand(sql, connect);
                 try
                 {
@@ -85,6 +83,7 @@ namespace FinalProject.Pages
                 try
                 {
                     ListVisualUpdate(lobbies.Count);
+                    Trace.WriteLine("Lobbies Updated");
                 }
                 catch { MessageBox.Show("Failed to update list"); }
             }
@@ -105,7 +104,7 @@ namespace FinalProject.Pages
                 command.ExecuteNonQuery();
                 connect.Close();
             } catch { Trace.WriteLine("Failed to delete lobby on entering"); }
-            NavigationService.Navigate(new Lobby(setting, lobbyId, 2, hostName));
+            NavigationService.Navigate(new Lobby(setting, lobbyId, hostName));
         }
 
         private void ListVisualUpdate(int lobbyCount)
@@ -320,7 +319,7 @@ namespace FinalProject.Pages
                 command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
                 connect.Close();
-                NavigationService.Navigate(new Lobby(setting, lobbyId.ToString(), 1));
+                NavigationService.Navigate(new Lobby(setting, lobbyId.ToString()));
             } catch { MessageBox.Show("Failed to connect to database to create lobby"); }
         }
         private void BtnMainMenu(object sender, RoutedEventArgs x)
