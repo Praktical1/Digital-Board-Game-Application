@@ -430,7 +430,7 @@ namespace FinalProject.Pages
                 try
                 {
                     connect.Open();
-                    string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}], [Player{2}]) VALUES (3, '{3}', 'well')", lobbyId, player, opponent, grid);
+                    string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{3}')", lobbyId, player, grid);
                     SqlCommand command = new SqlCommand(sql, connect);
                     command.ExecuteNonQuery();
                     connect.Close();
@@ -504,8 +504,8 @@ namespace FinalProject.Pages
                     {
                         opponent = 1;
                     }
-                    //try
-                    //{
+                    try
+                    {
                         connect.Open();
                         sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
                         command = new SqlCommand(sql, connect);
@@ -527,12 +527,12 @@ namespace FinalProject.Pages
                                 Trace.WriteLine("deleting old entry");
                                 sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
                                 command = new SqlCommand(sql, connect);
-                                command.ExecuteNonQuery();
+                                //command.ExecuteNonQuery();
                             }
                             catch { Trace.WriteLine("Failed to delete old moves"); }
                         }
                         connect.Close();
-                    //} catch { Trace.WriteLine("Failed to obtain database data"); }
+                    } catch { Trace.WriteLine("Failed to obtain database data"); try { connect.Close(); } catch { }; }
                 }
                 await Task.Delay(1000);
             }
