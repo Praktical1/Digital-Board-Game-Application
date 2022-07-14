@@ -429,7 +429,11 @@ namespace FinalProject.Pages
                 }
                 try
                 {
-                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}], [Player{2}]) VALUES (3, '{2}', 'well')", lobbyId, player, opponent, grid);
+                    connect.Open();
+                    string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}], [Player{2}]) VALUES (3, '{3}', 'well')", lobbyId, player, opponent, grid);
+                    SqlCommand command = new SqlCommand(sql, connect);
+                    command.ExecuteNonQuery();
+                    connect.Close();
                 } catch { Trace.WriteLine("Failed to send move"); }
                 move++;
             }
