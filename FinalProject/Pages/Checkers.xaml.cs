@@ -490,28 +490,34 @@ namespace FinalProject.Pages
                     {
                         opponent = 1;
                     }
-                    //try
-                    //{
+                    try
+                    {
                         connect.Open();
                         sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
                         command = new SqlCommand(sql, connect);
                         dataReader = command.ExecuteReader();
+                        string choice = "";
                         while (dataReader.Read())
                         {
-                            string choice = dataReader.GetValue(0).ToString();
+                            choice = dataReader.GetValue(0).ToString();
                             Select(choice);
-                            Trace.WriteLine(choice);
+                            Trace.WriteLine("this is opponents move: " + choice);
                         }
                         connect.Close();
                         connect.Open();
-                    //    try
-                    //    {
-                            sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
-                            command = new SqlCommand(sql, connect);
-                            command.ExecuteNonQuery();
-                            connect.Close();
-                    //    } catch { Trace.WriteLine("Failed to delete old moves"); }
-                    //} catch { Trace.WriteLine("Failed to obtain database data"); }
+                        if (choice == "")
+                        {
+                            try
+                            {
+                                Trace.WriteLine("deleting old entry");
+                                sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
+                                command = new SqlCommand(sql, connect);
+                                command.ExecuteNonQuery();
+                                connect.Close();
+                            }
+                            catch { Trace.WriteLine("Failed to delete old moves"); }
+                        }
+                    } catch { Trace.WriteLine("Failed to obtain database data"); }
                 }
                 await Task.Delay(1000);
             }
