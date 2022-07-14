@@ -420,7 +420,7 @@ namespace FinalProject.Pages
             {
                 try
                 {
-                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (1, '{2}')", lobbyId, player, grid);
+                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{2}')", lobbyId, player, grid);
                 } catch { Trace.WriteLine("Failed to send move"); }
                 move++;
             }
