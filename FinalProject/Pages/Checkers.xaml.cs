@@ -420,7 +420,7 @@ namespace FinalProject.Pages
             {
                 try
                 {
-
+                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (1, '{2}')", lobbyId, player, grid);
                 } catch { Trace.WriteLine("Failed to send move"); }
                 move++;
             }
@@ -492,14 +492,25 @@ namespace FinalProject.Pages
                     }
                     try
                     {
-                        sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=2", opponent, lobbyId);
+                        connect.Open();
+                        sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
                         command = new SqlCommand(sql, connect);
                         dataReader = command.ExecuteReader();
+                        while (dataReader.Read())
+                        {
+                            string choice = dataReader.GetValue(0).ToString();
+                            Select(choice);
+                            Trace.WriteLine(choice);
+                            await Task.Delay(200);
+                        }
+                        try
+                        {
+                            sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
+                            command = new SqlCommand(sql, connect);
+                            command.ExecuteNonQuery();
+                        } catch { Trace.WriteLine("Failed to delete old moves")}
+                        connect.Close();
                     } catch { Trace.WriteLine("Failed to obtain database data"); }
-                }
-                else
-                {
-
                 }
                 await Task.Delay(1000);
             }

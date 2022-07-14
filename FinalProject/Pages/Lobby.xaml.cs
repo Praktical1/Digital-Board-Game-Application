@@ -310,11 +310,6 @@ namespace FinalProject.Pages
             catch { MessageBox.Show("Failed to remove lobby from listing and deleting lobby table"); }
             NavigationService.Navigate(new OnlineMultiplayer(setting));
         }
-        private async void GoToGame()
-        {
-            await Task.Delay(5000);
-            NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
-        }
         private void LeaveLobby()
         {
             try 

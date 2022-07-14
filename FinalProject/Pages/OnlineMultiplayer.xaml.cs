@@ -96,7 +96,7 @@ namespace FinalProject.Pages
             string lobbyId = lobbies[lobby][0];
             string hostName = lobbies[lobby][1];
             SqlCommand command;
-            String sql = "DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='" + lobbyId + "'";
+            String sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
             command = new SqlCommand(sql, connect);
             try
             {
