@@ -418,9 +418,18 @@ namespace FinalProject.Pages
         {
             if (online)
             {
+                int opponent;
+                if (player == 1)
+                {
+                    opponent = 2;
+                }
+                else
+                {
+                    opponent = 1;
+                }
                 try
                 {
-                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{2}')", lobbyId, player, grid);
+                    String.Format("Insert [dbo].[{0}] ([ID], [Player{1}], [Player{2}]) VALUES (3, '{2}')", lobbyId, player, opponent, grid);
                 } catch { Trace.WriteLine("Failed to send move"); }
                 move++;
             }
