@@ -175,7 +175,20 @@
                 </Button>
             </StackPanel>
         </ScrollViewer>
-        
+
+
+        <Button Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnRefresh" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
+            <TextBlock Text="Refresh">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnMainMenu" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
             <TextBlock Text="Back To Menu">
                 <TextBlock.Effect>

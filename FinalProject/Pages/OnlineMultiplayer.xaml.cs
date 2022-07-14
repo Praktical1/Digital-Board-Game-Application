@@ -302,7 +302,7 @@ namespace FinalProject.Pages
             }
         }
 
-        private void BtnRefreshList(object sender, RoutedEventArgs x)
+        private void BtnRefresh(object sender, RoutedEventArgs x)
         {
             RefreshLobbies();
         }

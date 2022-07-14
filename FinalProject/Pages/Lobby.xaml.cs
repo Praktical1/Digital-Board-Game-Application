@@ -351,12 +351,6 @@ namespace FinalProject.Pages
             StartPing.Visibility = Visibility.Hidden;
         }
 
-        //Refresh
-        public void BtnRefresh(object sender, RoutedEventArgs e)
-        {
-            PlayerReady();
-        }
-
         //Ready Buttons
         public void BtnReady(object sender, RoutedEventArgs e)
         {
