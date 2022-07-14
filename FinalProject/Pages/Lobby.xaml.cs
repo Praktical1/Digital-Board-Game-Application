@@ -119,6 +119,10 @@ namespace FinalProject.Pages
                         output[1] = reader.GetValue(0).ToString();
                     }
                     connect.Close();
+                    if (output[0] != "Unknown")
+                    {
+                        Player2.Visibility = Visibility.Visible;
+                    } else { Player2.Visibility = Visibility.Hidden; }
                     if (player == 1)
                     {
                         Player2.Content = output[0];
