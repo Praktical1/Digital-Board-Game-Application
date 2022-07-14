@@ -54,7 +54,7 @@ namespace FinalProject.Pages
         public Checkers(Settings setting, String lobbyId, int player)
         {
             this.setting = setting;
-            online = true;
+            this.online = true;
             this.lobbyId = lobbyId;
             this.player = player;
             InitializeComponent();
@@ -514,7 +514,7 @@ namespace FinalProject.Pages
                                 Trace.WriteLine("deleting old entry");
                                 sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
                                 command = new SqlCommand(sql, connect);
-                                command.ExecuteNonQuery();
+                                //command.ExecuteNonQuery();
                             }
                             catch { Trace.WriteLine("Failed to delete old moves"); }
                         }
