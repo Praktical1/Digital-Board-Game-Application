@@ -286,7 +286,7 @@ namespace FinalProject.Pages
                     ping = false;
                     break;
                 default:
-                    NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
+                    NavigationService.Navigate(new Checkers(setting, lobbyId, player));
                     ready = false;
                     break;
             }
