@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -132,11 +133,21 @@ namespace FinalProject.Pages
             {
                 RedTurn.Visibility = Visibility.Visible;
                 BlackTurn.Visibility = Visibility.Hidden;
+                if (online)
+                {
+                    if (player == 1)
+                    { yourTurn = false; } else { yourTurn = true; }
+                }
             }
             else if (side == "B")
             {
                 RedTurn.Visibility = Visibility.Hidden;
                 BlackTurn.Visibility = Visibility.Visible;
+                if (online)
+                {
+                    if (player == 2)
+                    { yourTurn = false; } else { yourTurn = true; }
+                }
             }
             for (int i = 0; i < 8; i++)
             {
@@ -155,16 +166,10 @@ namespace FinalProject.Pages
             }
 
             //online side switch
-            if (yourTurn && online)
+            move = 0;
+            if (!yourTurn && online)
             {
                 ClearButtons();
-                move = 0;
-                yourTurn = false;
-            }
-            else if (online)
-            {
-                yourTurn = true;
-                move = 0;
             }
         }
 
@@ -429,8 +434,8 @@ namespace FinalProject.Pages
                 }
                 try
                 {
-                    connect.Open();
-                    string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{3}')", lobbyId, player, grid);
+                    if (connect.State != ConnectionState.Open) { connect.Open(); }
+                    string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{2}')", lobbyId, player, grid);
                     SqlCommand command = new SqlCommand(sql, connect);
                     command.ExecuteNonQuery();
                     connect.Close();
@@ -468,6 +473,11 @@ namespace FinalProject.Pages
                 BlackSurrender.Visibility = Visibility.Hidden;
                 RedSurrender.Visibility = Visibility.Hidden;
             }
+            if (!yourTurn && online)
+            {
+                ClearButtons();
+            }
+
             Trace.WriteLine("Stored piece: " + selected[0] + "-" + selected[1] + "-" + selected[2]);
         }
 
@@ -491,7 +501,6 @@ namespace FinalProject.Pages
             {
                 if (!yourTurn)
                 {
-                    Trace.WriteLine("not your turn");
                     SqlCommand command;
                     SqlDataReader dataReader;
                     String sql, Output = "";
@@ -506,28 +515,36 @@ namespace FinalProject.Pages
                     }
                     try
                     {
-                        connect.Open();
+                        if (connect.State != ConnectionState.Open) { connect.Open(); }
                         sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
                         command = new SqlCommand(sql, connect);
                         dataReader = command.ExecuteReader();
-                        string choice = "";
-                        Trace.WriteLine("about to read opponent move");
+                        List<string> choice = new List<string>();
                         while (dataReader.Read())
                         {
-                            choice = dataReader.GetValue(0).ToString();
-                            Trace.WriteLine("this is opponents move: " + choice);
-                            Select(choice);
+                            if (dataReader.GetValue(0).ToString() != "")
+                            {
+
+                                choice.Add(dataReader.GetValue(0).ToString());
+                            }
                         }
+                        choice.Add("STOP");
                         connect.Close();
-                        connect.Open();
-                        if (choice != "")
+                        if (connect.State != ConnectionState.Open) { connect.Open(); }
+                        if (choice[0] != "STOP")
                         {
                             try
                             {
                                 Trace.WriteLine("deleting old entry");
                                 sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
                                 command = new SqlCommand(sql, connect);
-                                //command.ExecuteNonQuery();
+                                command.ExecuteNonQuery();
+                                for(int i = 0; i < (choice.Count-1); i++)
+                                {
+                                    Trace.WriteLine("Opponent moves to: " + choice[i]);
+                                    Select(choice[i]);
+                                    await Task.Delay(300);
+                                }
                             }
                             catch { Trace.WriteLine("Failed to delete old moves"); }
                         }
@@ -586,7 +603,7 @@ namespace FinalProject.Pages
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    Trace.Write(Board[i, j][0]);
+                    //Trace.Write(Board[i, j][0]);
                     if (Board[i, j][0] == "R")
                     {
                         counterRed++;
@@ -595,7 +612,7 @@ namespace FinalProject.Pages
                         counterBlack++;
                     }
                 }
-                Trace.Write("\n");
+                //Trace.Write("\n");
             }
             if (counterRed == 0)
             {
@@ -696,7 +713,7 @@ namespace FinalProject.Pages
         private void MoveSelection(String grid, string[] temp)
         {
             Trace.WriteLine("Changing to selected: " + grid);
-            //Grab image
+            //Grab image of piece
             foreach (object container in ImageContainer.Children)
             {
                 var gridSelect = container as Grid;
@@ -707,7 +724,7 @@ namespace FinalProject.Pages
                         image.Source = new BitmapImage(new Uri(@"../../../Images/Blank.png", UriKind.Relative));
                     }
 
-                    //Place piece
+                    //Place image of piece in new location
                     if (image.Name == grid)
                     {
                         string piece = ImageSelector(selected[1], selected[2]);
@@ -715,10 +732,13 @@ namespace FinalProject.Pages
                     }
                 }
             }
+
+            //Moving piece on Board array
             Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())][0] = selected[1];
             Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())][1] = selected[2];
             Board[Int32.Parse(selected[0][1].ToString()) - 1, StringToNum(selected[0][0].ToString())][0] = " ";
             Board[Int32.Parse(selected[0][1].ToString()) - 1, StringToNum(selected[0][0].ToString())][1] = " ";
+
             //Responsible for deleting attacked units
             if (StringToNum(grid[0].ToString()) - StringToNum(selected[0][0].ToString()) == 2 || StringToNum(grid[0].ToString()) - StringToNum(selected[0][0].ToString()) == -2)
             {
@@ -736,6 +756,8 @@ namespace FinalProject.Pages
                         }
                     }
                 }
+
+                //Responsible for removing pieces off Board Array
                 Board[(Int32.Parse(grid[1].ToString()) + Int32.Parse(selected[0][1].ToString())) / 2 - 1, (StringToNum(grid[0].ToString()) + StringToNum(selected[0][0].ToString())) / 2][0] = " ";
                 Board[(Int32.Parse(grid[1].ToString()) + Int32.Parse(selected[0][1].ToString())) / 2 - 1, (StringToNum(grid[0].ToString()) + StringToNum(selected[0][0].ToString())) / 2][1] = " ";
                 Trace.WriteLine("X:" + (StringToNum(grid[0].ToString()) + StringToNum(selected[0][0].ToString())) / 2);
@@ -744,7 +766,7 @@ namespace FinalProject.Pages
                 Won();
             }
             selected = new string[3];
-            Trace.WriteLine("Cleared selected");
+
             if (!jump)
             {
                 if (temp[0] == "R")
@@ -756,7 +778,7 @@ namespace FinalProject.Pages
                     Turn("R");
                 }
             }
-            else
+            else if (yourTurn)
             {
                 Select(grid);
             }
@@ -793,7 +815,7 @@ namespace FinalProject.Pages
                                         ButtonShow(selection);
                                     }
                                 }
-                                catch { Trace.WriteLine("Forced pass 1 right"); }
+                                catch { Trace.Write("Forced pass 1 right | Next - "); }
                                 try
                                 {
                                     if (Board[i + Modifier, j - 1][0] == Enemy && Board[i + Modifier * 2, j - 2][0] == " ")
@@ -804,12 +826,11 @@ namespace FinalProject.Pages
                                         ButtonShow(selection);
                                     }
                                 }
-                                catch { Trace.WriteLine("Forced pass 1 Left"); }
+                                catch { Trace.Write("Forced pass 1 Left | Next - "); }
 
                             }
                             else if (Board[i, j][1] == "2") //Checks if Kings need to be forced
                             {
-                                Trace.WriteLine("checking if King needs to be forced");
                                 try
                                 {
                                     if (Board[i + Modifier, j + 1][0] == Enemy && Board[i + Modifier * 2, j + 2][0] == " ")
@@ -820,7 +841,7 @@ namespace FinalProject.Pages
                                         ButtonShow(selection);
                                     }
                                 }
-                                catch { Trace.WriteLine("Forced pass 2 right"); }
+                                catch { Trace.Write("Forced pass 2 right | Next - "); }
                                 try
                                 {
                                     if (Board[i + Modifier, j - 1][0] == Enemy && Board[i + Modifier * 2, j - 2][0] == " ")
@@ -831,7 +852,7 @@ namespace FinalProject.Pages
                                         ButtonShow(selection);
                                     }
                                 }
-                                catch { Trace.WriteLine("Forced pass 2 left"); }
+                                catch { Trace.Write("Forced pass 2 left | Next - "); }
                                 try
                                 {
                                     if (Board[i - Modifier, j + 1][0] == Enemy && Board[i - Modifier * 2, j + 2][0] == " ")
@@ -842,7 +863,7 @@ namespace FinalProject.Pages
                                         ButtonShow(selection);
                                     }
                                 }
-                                catch { Trace.WriteLine("Forced pass 2 right 2"); }
+                                catch { Trace.Write("Forced pass 2 right 2 | Next - "); }
                                 try
                                 {
                                     if (Board[i - Modifier, j - 1][0] == Enemy && Board[i - Modifier * 2, j - 2][0] == " ")
@@ -853,7 +874,7 @@ namespace FinalProject.Pages
                                         ButtonShow(selection);
                                     }
                                 }
-                                catch { Trace.WriteLine("Forced pass 2 left 2"); }
+                                catch { Trace.Write("Forced pass 2 left 2 | Next - "); }
                             }
                         }
                     }
