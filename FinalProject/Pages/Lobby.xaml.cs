@@ -170,10 +170,10 @@ namespace FinalProject.Pages
             connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
         }
 
-        public async void PlayerReady(int num)
+        public async void PlayerReady()
         {
             SqlCommand command;
-            if (player == 1 && num == 1)
+            if (player == 1)
             {
                 if (Ready.Background == Brushes.Green)
                 {
@@ -208,39 +208,12 @@ namespace FinalProject.Pages
                         {
                             counter++;
                         }
-                        switch (counter)
-                        {
-                            case 0:
-                                Countdown.Visibility = Visibility.Hidden;
-                                Ready.Visibility = Visibility.Visible;
-                                Ready.Visibility = Visibility.Visible;
-                                break;
-                            case 1:
-                                Countdown.Visibility = Visibility.Visible;
-                                Countdown.Content = "3";
-                                break;
-                            case 2:
-                                Countdown.Content = "2";
-                                break;
-                            case 3:
-                                Countdown.Content = "1";
-                                Ready.Visibility = Visibility.Hidden;
-                                Ready.Visibility = Visibility.Hidden; ;
-                                break;
-                            case 4:
-                                Countdown.Content = "0";
-                                ping = false;
-                                break;
-                            default:
-                                NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
-                                ready = false;
-                                break;
-                        }
+                        CountdownTimer(counter);
                         await Task.Delay(1000);
                     }
                 }
             }
-            else if (player == 2 && num == 2)
+            else if (player == 2)
             {
                 if (Ready.Background == Brushes.Green)
                 {
@@ -277,35 +250,7 @@ namespace FinalProject.Pages
                         {
                             counter++;
                         }
-                        switch (counter)
-                        {
-                            case 0:
-                                Countdown.Visibility = Visibility.Hidden;
-                                Ready.Visibility = Visibility.Visible;
-                                Ready.Visibility = Visibility.Visible;
-                                ping = true;
-                                break;
-                            case 1:
-                                Countdown.Visibility = Visibility.Visible;
-                                Countdown.Content = "3";
-                                break;
-                            case 2:
-                                Countdown.Content = "2";
-                                break;
-                            case 3:
-                                Countdown.Content = "1";
-                                Ready.Visibility = Visibility.Hidden;
-                                Ready.Visibility = Visibility.Hidden;
-                                break;
-                            case 4:
-                                Countdown.Content = "0";
-                                ping = false;
-                                break;
-                            default:
-                                NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
-                                ready = false;
-                                break;
-                        }
+                        CountdownTimer(counter);
                         await Task.Delay(1000);
                     }
                 }
@@ -313,9 +258,36 @@ namespace FinalProject.Pages
             
         }
 
-        private void countdown(int count)
+        private void CountdownTimer(int count)
         {
-
+            switch (count)
+            {
+                case 0:
+                    Countdown.Visibility = Visibility.Hidden;
+                    Ready.Visibility = Visibility.Visible;
+                    Ready.Visibility = Visibility.Visible;
+                    break;
+                case 1:
+                    Countdown.Visibility = Visibility.Visible;
+                    Countdown.Content = "3";
+                    break;
+                case 2:
+                    Countdown.Content = "2";
+                    break;
+                case 3:
+                    Countdown.Content = "1";
+                    Ready.Visibility = Visibility.Hidden;
+                    Ready.Visibility = Visibility.Hidden; ;
+                    break;
+                case 4:
+                    Countdown.Content = "0";
+                    ping = false;
+                    break;
+                default:
+                    NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
+                    ready = false;
+                    break;
+            }
         }
 
         private void CloseLobby()
@@ -379,14 +351,16 @@ namespace FinalProject.Pages
             StartPing.Visibility = Visibility.Hidden;
         }
 
-        //Ready Buttons
-        public void BtnPlayer1Ready(object sender, RoutedEventArgs e)
+        //Refresh
+        public void BtnReady(object sender, RoutedEventArgs e)
         {
-            PlayerReady(1);
+            PlayerReady();
         }
-        public void BtnPlayer2Ready(object sender, RoutedEventArgs e)
+
+        //Ready Buttons
+        public void BtnReady(object sender, RoutedEventArgs e)
         {
-            PlayerReady(2);
+            PlayerReady();
         }
 
         //Returning to lobby explorer

@@ -58,9 +58,22 @@
         </StackPanel>
         <Label x:Name="Countdown" Grid.Row="1" Grid.Column="1" FontSize="250" Content="3" HorizontalAlignment="Center" Background="#66f0fff0" Visibility="Hidden"/>
         <Grid  Grid.Row="2" Grid.Column="1">
-            <Button x:Name="Ready" Background="Red" Content="Ready" FontSize="60" Click="BtnPlayer1Ready"/>
+            <Button x:Name="Ready" Background="Red" Content="Ready" FontSize="60" Click="BtnReady"/>
         </Grid>
 
+        <Button Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnRefresh" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
+            <TextBlock Text="Refresh">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
         <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnMultiplayer" FontSize="30" Padding="0 20 0 0"  HorizontalAlignment="Center" >
             <TextBlock Text="Back To Listing">
                 <TextBlock.Effect>
