@@ -64,7 +64,7 @@ namespace FinalProject.Pages
             try
             {
                 connect.Open();
-                string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player1], [Player2]) VALUES (1, '{1}', 'Unknown')", lobbyId, setting.userId);
+                string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player1], [Player2]) VALUES (1, '{1}', 'unknown')", lobbyId, setting.userId);
                 SqlCommand command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
                 sql = String.Format("Insert [dbo].[{0}] ([ID], [Player1], [Player2]) VALUES (2, 'waiting', 'waiting')", lobbyId);
@@ -123,7 +123,7 @@ namespace FinalProject.Pages
                         output[1] = reader.GetValue(0).ToString();
                     }
                     connect.Close();
-                    if (output[0] != "Unknown")
+                    if (output[0] != "unknown")
                     {
                         Player2.Visibility = Visibility.Visible;
                     } else { Player2.Visibility = Visibility.Hidden; }
@@ -315,13 +315,16 @@ namespace FinalProject.Pages
             await Task.Delay(5000);
             NavigationService.Navigate(new Checkers(setting, lobbyId, 1));
         }
-        private void CreateLobbyListing()
+        private void LeaveLobby()
         {
             try 
             { 
                 connect.Open();
                 sql = String.Format("INSERT [dbo].[lobbies] ([Lobby],[Host]) VALUES ('{0}','{1}')", lobbyId, hostName);
                 SqlCommand command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
+                sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = 'unknown' WHERE ID=1", lobbyId);
+                command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
                 sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = 'waiting' WHERE ID=2", lobbyId);
                 command = new SqlCommand(sql, connect);
@@ -339,7 +342,7 @@ namespace FinalProject.Pages
                 CloseLobby();
             } else
             {
-                CreateLobbyListing();
+                LeaveLobby();
             }
             ping = false;
         }
