@@ -505,7 +505,7 @@ namespace FinalProject.Pages
                         }
                         connect.Close();
                         connect.Open();
-                        if (choice == "")
+                        if (choice != "")
                         {
                             try
                             {
