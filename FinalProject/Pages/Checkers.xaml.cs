@@ -416,7 +416,7 @@ namespace FinalProject.Pages
         //Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
         private async void Select(String grid)
         {
-            if (online)
+            if (online && yourTurn)
             {
                 int opponent;
                 if (player == 1)
@@ -527,7 +527,7 @@ namespace FinalProject.Pages
                                 Trace.WriteLine("deleting old entry");
                                 sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
                                 command = new SqlCommand(sql, connect);
-                                //command.ExecuteNonQuery();
+                                command.ExecuteNonQuery();
                             }
                             catch { Trace.WriteLine("Failed to delete old moves"); }
                         }
