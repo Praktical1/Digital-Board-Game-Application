@@ -498,6 +498,7 @@ namespace FinalProject.Pages
                         command = new SqlCommand(sql, connect);
                         dataReader = command.ExecuteReader();
                         string choice = "";
+                        Trace.WriteLine("about to read opponent move");
                         while (dataReader.Read())
                         {
                             choice = dataReader.GetValue(0).ToString();
