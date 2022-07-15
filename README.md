@@ -1,8 +1,8 @@
 # Digital Board Game Application
 
 <ul>
-  <li>Master Branch = Original</li>
-  <li>Redesigned Branch = Attempt to rewrite code to conform more towards OOP</li>
+  <li>Master Branch = Original - works</li>
+  <li>Redesigned Branch = Attempt to rewrite code to conform more towards OOP - works</li>
 </ul>
 
 Features:
@@ -28,7 +28,7 @@ Features:
 
 To Do:
 <ul>
-  <li>Convert code into something more OOP based (please refer to branch Redesigned for this version (currently Work in Progress))</li>
+  <li>Convert code into something more OOP based (please refer to branch Redesigned for this version)</li>
   <li>Complete Chess</li>
   <li>Add next page option to lobby listing</li>
   <li>Kick option for lobbies</li>
