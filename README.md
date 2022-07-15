@@ -1,7 +1,9 @@
 # Digital Board Game Application
 
-Master Branch = Original
-Redesigned Branch = Attempt to rewrite code to conform more towards OOP
+<ul>
+  <li>Master Branch = Original</li>
+  <li>Redesigned Branch = Attempt to rewrite code to conform more towards OOP</li>
+</ul>
 
 Features:
 
