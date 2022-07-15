@@ -187,7 +187,9 @@ namespace FinalProject.Pages
                 {
                     if (board.grid[i, j].holds[0] == side)
                     {
+                        Trace.WriteLine(board.grid[i, j].holds[0]);
                         string selection = NumToString(j) + (i + 1).ToString() + "Select";
+                        Trace.WriteLine(selection);
                         ButtonShow(selection);
                     }
                 }
@@ -445,7 +447,7 @@ namespace FinalProject.Pages
         }
 
         //Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
-        private async void Select(String grid)
+        private void Select(String grid)
         {
             if (online && yourTurn)
             {
@@ -816,6 +818,7 @@ namespace FinalProject.Pages
         }
         private void ButtonShow(String gridReference, String colour)
         {
+            Trace.WriteLine(gridReference);
             try
             {
                 foreach (object container in ButtonContainer.Children)

@@ -24,15 +24,15 @@ namespace FinalProjectRedesigned.Model
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (i % 2 == 0 && j % 2 == 1 || i % 2 == 1 && j % 2 == 0)
+                    if (i % 2 == 1 && j % 2 == 1 || i % 2 == 0 && j % 2 == 0)
                     {
                         if (i < 3)
                         {
-                            grid[i, j] = new Cell(i, j, "B", "1");
+                            grid[i, j] = new Cell(i, j, "R", "1");
                         }
                         else if (i > 4)
                         {
-                            grid[i, j] = new Cell(i, j, "R", "1");
+                            grid[i, j] = new Cell(i, j, "B", "1");
                         }
                         else
                         {
