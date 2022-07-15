@@ -50,7 +50,7 @@ namespace FinalProject.Pages
         {
             if (setting.gameType == "Checkers")
             {
-                NavigationService.Navigate(new Checkers(setting));
+                NavigationService.Navigate(new CheckersRedesigned(setting));
             } else if (setting.gameType == "Chess")
             {
                 NavigationService.Navigate(new Chess(setting));

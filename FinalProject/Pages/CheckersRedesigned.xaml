@@ -1,0 +1,484 @@
+﻿<Page x:Class="FinalProject.Pages.CheckersRedesigned"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FinalProject.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CheckersRedesigned">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="1.75*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="10*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style x:Key="TextBoxGlow" TargetType="{x:Type Button}">
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="0"
+                                   To="1" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Button.Content).(TextBlock.Effect).Opacity" From="1"
+                                   To="0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        
+
+        <!--Hint-->
+        <TextBlock Grid.Column="2" Text="To Surrender - spam click your unit to reveal surrender button" TextWrapping="Wrap" Foreground="White"/>
+        <!--Main Menu Button-->
+        <Button Grid.Row="0" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="White" Click="BtnMainMenu" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Return to Menu">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="White" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
+        <!--Player Turn-->
+        <Label x:Name="BlackTurn" Content="Black Turn" Grid.Row="0" Grid.Column="1" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Background="Black" Foreground="White"/>
+        <Label x:Name="RedTurn" Content="Red Turn" Grid.Row="2" Grid.Column="1" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Background="Red" Foreground="White"/>
+        
+        <!--Surrender option-->
+        <Button x:Name="BlackSurrender" Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="White" Click="BtnBlackSurrender" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden">
+            <TextBlock Text="Black Surrender">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="White" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="RedSurrender" Grid.Row="1" Grid.Column="2" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="White" Click="BtnRedSurrender" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden">
+            <TextBlock Text="Red Surrender">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="8" Color="White" ShadowDepth="0" Opacity="0" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <!--Board-->
+        <Grid Background="#7d3f10" Grid.Row="1" Grid.Column="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!--Row/Column identifier-->
+            <!--Top-->
+            <TextBlock Text="A" Grid.Column="1" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="B" Grid.Column="2" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="C" Grid.Column="3" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="D" Grid.Column="4" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="E" Grid.Column="5" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="F" Grid.Column="6" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="G" Grid.Column="7" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="H" Grid.Column="8" Grid.Row="0" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+
+            <!--Bottom-->
+            <TextBlock Text="A" Grid.Column="1" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="B" Grid.Column="2" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="C" Grid.Column="3" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="D" Grid.Column="4" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="E" Grid.Column="5" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="F" Grid.Column="6" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="G" Grid.Column="7" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="H" Grid.Column="8" Grid.Row="9" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+
+            <!--Left-->
+            <TextBlock Text="1" Grid.Column="0" Grid.Row="8" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="2" Grid.Column="0" Grid.Row="7" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="3" Grid.Column="0" Grid.Row="6" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="4" Grid.Column="0" Grid.Row="5" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="5" Grid.Column="0" Grid.Row="4" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="6" Grid.Column="0" Grid.Row="3" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="7" Grid.Column="0" Grid.Row="2" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="8" Grid.Column="0" Grid.Row="1" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+
+            <!--Right-->
+            <TextBlock Text="1" Grid.Column="9" Grid.Row="8" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="2" Grid.Column="9" Grid.Row="7" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="3" Grid.Column="9" Grid.Row="6" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="4" Grid.Column="9" Grid.Row="5" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="5" Grid.Column="9" Grid.Row="4" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="6" Grid.Column="9" Grid.Row="3" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="7" Grid.Column="9" Grid.Row="2" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+            <TextBlock Text="8" Grid.Column="9" Grid.Row="1" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#f2cf9d"/>
+
+
+            <!--Play Area-->
+
+            <Grid Name="ImageContainer" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="8" Background="Black">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!--Row 8-->
+                <Grid Grid.Row="0" Grid.Column="0" Background="Red" />
+                <Grid Grid.Row="0" Grid.Column="1" >
+                    <Image x:Name="B8" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="2" Background="Red" />
+                <Grid Grid.Row="0" Grid.Column="3" >
+                    <Image x:Name="D8" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="4" Background="Red" />
+                <Grid Grid.Row="0" Grid.Column="5" >
+                    <Image x:Name="F8" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="6" Background="Red" />
+                <Grid Grid.Row="0" Grid.Column="7" >
+                    <Image x:Name="H8" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <!--Row 7-->
+                <Grid Grid.Row="1" Grid.Column="0" >
+                    <Image x:Name="A7" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1" Background="Red" />
+                <Grid Grid.Row="1" Grid.Column="2" >
+                    <Image x:Name="C7" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="3" Background="Red" />
+                <Grid Grid.Row="1" Grid.Column="4" >
+                    <Image x:Name="E7" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="5" Background="Red" />
+                <Grid Grid.Row="1" Grid.Column="6" >
+                    <Image x:Name="G7" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="7" Background="Red" />
+                <!--Row 6-->
+                <Grid Grid.Row="2" Grid.Column="0" Background="Red" />
+                <Grid Grid.Row="2" Grid.Column="1" >
+                    <Image x:Name="B6" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="2" Background="Red" />
+                <Grid Grid.Row="2" Grid.Column="3" >
+                    <Image x:Name="D6" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="4" Background="Red" />
+                <Grid Grid.Row="2" Grid.Column="5" >
+                    <Image x:Name="F6" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="6" Background="Red" />
+                <Grid Grid.Row="2" Grid.Column="7" >
+                    <Image x:Name="H6" Source="../Images/CheckerPieces/Black_Pawn.png"/>
+                </Grid>
+                <!--Row 5-->
+                <Grid Grid.Row="3" Grid.Column="0" >
+                    <Image x:Name="A5" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="1" Background="Red" />
+                <Grid Grid.Row="3" Grid.Column="2" >
+                    <Image x:Name="C5" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="3" Background="Red" />
+                <Grid Grid.Row="3" Grid.Column="4" >
+                    <Image x:Name="E5" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="5" Background="Red" />
+                <Grid Grid.Row="3" Grid.Column="6" >
+                    <Image x:Name="G5" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="7" Background="Red" />
+                <!--Row 4-->
+                <Grid Grid.Row="4" Grid.Column="0" Background="Red" />
+                <Grid Grid.Row="4" Grid.Column="1" >
+                    <Image x:Name="B4" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="2" Background="Red" />
+                <Grid Grid.Row="4" Grid.Column="3" >
+                    <Image x:Name="D4" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="4" Background="Red" />
+                <Grid Grid.Row="4" Grid.Column="5" >
+                    <Image x:Name="F4" Source="../Images/Blank.png"/>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="6" Background="Red" />
+                <Grid Grid.Row="4" Grid.Column="7" >
+                    <Image x:Name="H4" Source="../Images/Blank.png"/>
+                </Grid>
+                <!--Row 3-->
+                <Grid Grid.Row="5" Grid.Column="0" >
+                    <Image x:Name="A3" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="1" Background="Red" />
+                <Grid Grid.Row="5" Grid.Column="2" >
+                    <Image x:Name="C3" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="3" Background="Red" />
+                <Grid Grid.Row="5" Grid.Column="4" >
+                    <Image x:Name="E3" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="5" Background="Red" />
+                <Grid Grid.Row="5" Grid.Column="6" >
+                    <Image x:Name="G3" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="7" Background="Red" />
+                <!--Row 2-->
+                <Grid Grid.Row="6" Grid.Column="0" Background="Red" />
+                <Grid Grid.Row="6" Grid.Column="1" >
+                    <Image x:Name="B2" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="2" Background="Red" />
+                <Grid Grid.Row="6" Grid.Column="3" >
+                    <Image x:Name="D2" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="4" Background="Red" />
+                <Grid Grid.Row="6" Grid.Column="5" >
+                    <Image x:Name="F2" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="6" Background="Red" />
+                <Grid Grid.Row="6" Grid.Column="7" >
+                    <Image x:Name="H2" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <!--Row 1-->
+                <Grid Grid.Row="7" Grid.Column="0" >
+                    <Image x:Name="A1" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="1" Background="Red" />
+                <Grid Grid.Row="7" Grid.Column="2" >
+                    <Image x:Name="C1" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="3" Background="Red" />
+                <Grid Grid.Row="7" Grid.Column="4" >
+                    <Image x:Name="E1" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="5" Background="Red" />
+                <Grid Grid.Row="7" Grid.Column="6" >
+                    <Image x:Name="G1" Source="../Images/CheckerPieces/Red_Pawn.png"/>
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="7" Background="Red" />
+            </Grid>
+
+            <Grid Name="ButtonContainer" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="8" Grid.RowSpan="8">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!--Row 8-->
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Button x:Name="B8Select" Background="White" Opacity="0.4" Click="Button_B8" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="3">
+                    <Button x:Name="D8Select" Background="White" Opacity="0.4" Click="Button_D8" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="5">
+                    <Button x:Name="F8Select" Background="White" Opacity="0.4" Click="Button_F8" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="7">
+                    <Button x:Name="H8Select" Background="White" Opacity="0.4" Click="Button_H8" Visibility="Hidden" />
+                </Grid>
+                <!--Row 7-->
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Button x:Name="A7Select" Background="White" Opacity="0.4" Click="Button_A7" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="2">
+                    <Button x:Name="C7Select" Background="White" Opacity="0.4" Click="Button_C7" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="4">
+                    <Button x:Name="E7Select" Background="White" Opacity="0.4" Click="Button_E7" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="6">
+                    <Button x:Name="G7Select" Background="White" Opacity="0.4" Click="Button_G7" Visibility="Hidden" />
+                </Grid>
+                <!--Row 6-->
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Button x:Name="B6Select" Background="White" Opacity="0.4" Click="Button_B6" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="3">
+                    <Button x:Name="D6Select" Background="White" Opacity="0.4" Click="Button_D6" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="5">
+                    <Button x:Name="F6Select" Background="White" Opacity="0.4" Click="Button_F6" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="7" >
+                    <Button x:Name="H6Select" Background="White" Opacity="0.4" Click="Button_H6" Visibility="Hidden" />
+                </Grid>
+                <!--Row 5-->
+                <Grid Grid.Row="3" Grid.Column="0" >
+                    <Button x:Name="A5Select" Background="White" Opacity="0.4" Click="Button_A5" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="2" >
+                    <Button x:Name="C5Select" Background="White" Opacity="0.4" Click="Button_C5" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="4" >
+                    <Button x:Name="E5Select" Background="White" Opacity="0.4" Click="Button_E5" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="6" >
+                    <Button x:Name="G5Select" Background="White" Opacity="0.4" Click="Button_G5" Visibility="Hidden" />
+                </Grid>
+                <!--Row 4-->
+                <Grid Grid.Row="4" Grid.Column="1" >
+                    <Button x:Name="B4Select" Background="White" Opacity="0.4" Click="Button_B4" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="3" >
+                    <Button x:Name="D4Select" Background="White" Opacity="0.4" Click="Button_D4" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="5" >
+                    <Button x:Name="F4Select" Background="White" Opacity="0.4" Click="Button_F4" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="7" >
+                    <Button x:Name="H4Select" Background="White" Opacity="0.4" Click="Button_H4" Visibility="Hidden" />
+                </Grid>
+                <!--Row 3-->
+                <Grid Grid.Row="5" Grid.Column="0" >
+                    <Button x:Name="A3Select" Background="White" Opacity="0.4" Click="Button_A3" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="2" >
+                    <Button x:Name="C3Select" Background="White" Opacity="0.4" Click="Button_C3" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="4" >
+                    <Button x:Name="E3Select" Background="White" Opacity="0.4" Click="Button_E3" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="6" >
+                    <Button x:Name="G3Select" Background="White" Opacity="0.4" Click="Button_G3" Visibility="Hidden" />
+                </Grid>
+                <!--Row 2-->
+                <Grid Grid.Row="6" Grid.Column="1" >
+                    <Button x:Name="B2Select" Background="White" Opacity="0.4" Click="Button_B2" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="3" >
+                    <Button x:Name="D2Select" Background="White" Opacity="0.4" Click="Button_D2" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="5" >
+                    <Button x:Name="F2Select" Background="White" Opacity="0.4" Click="Button_F2" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="6" Grid.Column="7" >
+                    <Button x:Name="H2Select" Background="White" Opacity="0.4" Click="Button_H2" Visibility="Hidden" />
+                </Grid>
+                <!--Row 1-->
+                <Grid Grid.Row="7" Grid.Column="0" >
+                    <Button x:Name="A1Select" Background="White" Opacity="0.4" Click="Button_A1" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="2" >
+                    <Button x:Name="C1Select" Background="White" Opacity="0.4" Click="Button_C1" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="4" >
+                    <Button x:Name="E1Select" Background="White" Opacity="0.4" Click="Button_E1" Visibility="Hidden" />
+                </Grid>
+                <Grid Grid.Row="7" Grid.Column="6" >
+                    <Button x:Name="G1Select" Background="White" Opacity="0.4" Click="Button_G1" Visibility="Hidden" />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!--Multiplayer ping service start button-->
+        <Button x:Name="StartPing" Grid.RowSpan="3" Grid.ColumnSpan="3" Content="Click to Start" FontSize="120" Click="BtnPingService" Background="DarkGray" Visibility="Hidden"/>
+        
+        <!--End Game Screen-->
+        <Grid x:Name="EndScreen" Grid.RowSpan="3" Grid.ColumnSpan="3" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Image Grid.RowSpan="2" x:Name="Background" Source="/Images/Background.png" Stretch="UniformToFill" Visibility="Visible"/>
+            <Label x:Name="BlackWon" Content="Black Won" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Foreground="Black"/>
+            <Label x:Name="RedWon" Content="Red Won" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Foreground="Red"/>
+            <Button Grid.Row="1" Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#5b0000" Click="BtnMainMenu" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Return to Menu">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="8" Color="DarkRed" ShadowDepth="0" Opacity="0" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>
+
