@@ -1,6 +1,4 @@
-# FinalProject
-
-Digital Board Game Application
+# Digital Board Game Application
 
 Master Branch = Original
 Redesigned Branch = Attempt to rewrite code to conform more towards OOP
