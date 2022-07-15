@@ -129,7 +129,6 @@ namespace FinalProject.Pages
                                 textBlock.Visibility = Visibility.Hidden;
                             }
                         }
-
                     }
                 }
             }
