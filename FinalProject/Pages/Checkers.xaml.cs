@@ -119,6 +119,34 @@ namespace FinalProject.Pages
             }
         }
 
+        // Responsible for returning image string based on unit colour and type
+        private string ImageSelector(string colour, string type)
+        {
+            switch (colour)
+            {
+                case "R":
+                    switch (type)
+                    {
+                        case "1":
+                            return "../../../Images/CheckerPieces/Red_Pawn.png";
+                        case "2":
+                            return "../../../Images/CheckerPieces/Red_King.png";
+                        default: return "../../../Images/error-icon.png";
+                    }
+                case "B":
+                    switch (type)
+                    {
+                        case "1":
+                            return "../../../Images/CheckerPieces/Black_Pawn.png";
+                        case "2":
+                            return "../../../Images/CheckerPieces/Black_King.png";
+                        default: return "../../../Images/error-icon.png";
+                    }
+                default: return "../../../Images/error-icon.png";
+
+            }
+        }
+
         //Responsible for a new turn
         private void Turn(String side)
         {
@@ -540,47 +568,6 @@ namespace FinalProject.Pages
             }
         }
 
-        // Responsible for returning image string based on unit colour and type
-        private string ImageSelector(string colour, string type)
-        {
-            switch (colour)
-            {
-                case "R":
-                    switch (type)
-                    {
-                        case "1":
-                            return "../../../Images/CheckerPieces/Red_Pawn.png";
-                        case "2":
-                            return "../../../Images/CheckerPieces/Red_King.png";
-                        default: return "../../../Images/error-icon.png";
-                    }
-                case "B":
-                    switch (type)
-                    {
-                        case "1":
-                            return "../../../Images/CheckerPieces/Black_Pawn.png";
-                        case "2":
-                            return "../../../Images/CheckerPieces/Black_King.png";
-                        default: return "../../../Images/error-icon.png";
-                    }
-                default: return "../../../Images/error-icon.png";
-
-            }
-        }
-
-        // Responsible for clearing all the buttons on the board
-        private void ClearButtons()
-        {
-            foreach (object container in ButtonContainer.Children)
-            {
-                var gridSelect = container as Grid;
-                foreach (Button button in gridSelect.Children)
-                {
-                    button.Visibility = Visibility.Hidden; //Final should be hidden
-                    button.Background = new BrushConverter().ConvertFromString("#FFFFFF") as SolidColorBrush;
-                }
-            }
-        }
 
         // Responbile for selecting a unit and showing appropiate actions for the unit
         private void ChooseSelection(String grid, string[] temp)
@@ -797,6 +784,8 @@ namespace FinalProject.Pages
                 }
             }
         }
+        
+        // Reveals specified buttons on the board
         private void ButtonShow(String gridReference)
         {
             try
@@ -832,6 +821,20 @@ namespace FinalProject.Pages
                     }
                 }
             } catch { Trace.WriteLine("Button show 2 exception"); }
+        }
+
+        // Hides all the buttons on the board
+        private void ClearButtons()
+        {
+            foreach (object container in ButtonContainer.Children)
+            {
+                var gridSelect = container as Grid;
+                foreach (Button button in gridSelect.Children)
+                {
+                    button.Visibility = Visibility.Hidden; //Final should be hidden
+                    button.Background = new BrushConverter().ConvertFromString("#FFFFFF") as SolidColorBrush;
+                }
+            }
         }
 
         // Multiplayer Functionality

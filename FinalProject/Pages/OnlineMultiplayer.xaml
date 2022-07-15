@@ -49,11 +49,11 @@
 
         <Label Grid.Column="1" Content="Online Multiplayer" FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" />
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="#66f0fff0" Padding="10">
-            <StackPanel>
-                <Label x:Name="Title" Content="Lobbies" Margin="60 0 0 0" FontSize="40" />
-                <Separator/>
-                <Button Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby1" FontSize="30" Padding="50 0 0 0" >
+        <Label Grid.Row="1" Grid.Column="1" x:Name="Title" Content="Lobbies" Margin="60 0 0 0" FontSize="40" />
+        <Separator Grid.Row="1" Grid.Column="1"/>
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Hidden" Background="#66f0fff0" Padding="10 60 10 10">
+            <StackPanel x:Name="ListingContainer">
+                <Button x:Name="Lobby1Btn"  Background="#01000000" BorderThickness="0" Style="{StaticResource TextBoxGlow}" Foreground="#E02700" Click="BtnLobby1" FontSize="30" Padding="50 0 0 0" >
                     <TextBlock x:Name="Lobby1" Text="Lobby1">
                         <TextBlock.Effect>
                             <DropShadowEffect BlurRadius="8" Color="Red" ShadowDepth="0" Opacity="0" />

@@ -109,196 +109,31 @@ namespace FinalProject.Pages
 
         private void ListVisualUpdate(int lobbyCount)
         {
-            switch (lobbyCount)
+            try
             {
-                case 0:
-                    Lobby1.Visibility = Visibility.Hidden;
-                    Lobby2.Visibility = Visibility.Hidden;
-                    Lobby3.Visibility = Visibility.Hidden;
-                    Lobby4.Visibility = Visibility.Hidden;
-                    Lobby5.Visibility = Visibility.Hidden;
-                    Lobby6.Visibility = Visibility.Hidden;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 1:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Hidden;
-                    Lobby3.Visibility = Visibility.Hidden;
-                    Lobby4.Visibility = Visibility.Hidden;
-                    Lobby5.Visibility = Visibility.Hidden;
-                    Lobby6.Visibility = Visibility.Hidden;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 2:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Hidden;
-                    Lobby4.Visibility = Visibility.Hidden;
-                    Lobby5.Visibility = Visibility.Hidden;
-                    Lobby6.Visibility = Visibility.Hidden;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 3:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Hidden;
-                    Lobby5.Visibility = Visibility.Hidden;
-                    Lobby6.Visibility = Visibility.Hidden;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 4:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Hidden;
-                    Lobby6.Visibility = Visibility.Hidden;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 5:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby5.Text = lobbies[4][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Visible;
-                    Lobby6.Visibility = Visibility.Hidden;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 6:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby5.Text = lobbies[4][1] + "'s Lobby";
-                    Lobby6.Text = lobbies[5][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Visible;
-                    Lobby6.Visibility = Visibility.Visible;
-                    Lobby7.Visibility = Visibility.Hidden;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 7:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby5.Text = lobbies[4][1] + "'s Lobby";
-                    Lobby6.Text = lobbies[5][1] + "'s Lobby";
-                    Lobby7.Text = lobbies[6][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Visible;
-                    Lobby6.Visibility = Visibility.Visible;
-                    Lobby7.Visibility = Visibility.Visible;
-                    Lobby8.Visibility = Visibility.Hidden;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 8:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby5.Text = lobbies[4][1] + "'s Lobby";
-                    Lobby6.Text = lobbies[5][1] + "'s Lobby";
-                    Lobby7.Text = lobbies[6][1] + "'s Lobby";
-                    Lobby8.Text = lobbies[7][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Visible;
-                    Lobby6.Visibility = Visibility.Visible;
-                    Lobby7.Visibility = Visibility.Visible;
-                    Lobby8.Visibility = Visibility.Visible;
-                    Lobby9.Visibility = Visibility.Hidden;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                case 9:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby5.Text = lobbies[4][1] + "'s Lobby";
-                    Lobby6.Text = lobbies[5][1] + "'s Lobby";
-                    Lobby7.Text = lobbies[6][1] + "'s Lobby";
-                    Lobby8.Text = lobbies[7][1] + "'s Lobby";
-                    Lobby9.Text = lobbies[8][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Visible;
-                    Lobby6.Visibility = Visibility.Visible;
-                    Lobby7.Visibility = Visibility.Visible;
-                    Lobby8.Visibility = Visibility.Visible;
-                    Lobby9.Visibility = Visibility.Visible;
-                    Lobby10.Visibility = Visibility.Hidden;
-                    break;
-                default:
-                    Lobby1.Text = lobbies[0][1] + "'s Lobby";
-                    Lobby2.Text = lobbies[1][1] + "'s Lobby";
-                    Lobby3.Text = lobbies[2][1] + "'s Lobby";
-                    Lobby4.Text = lobbies[3][1] + "'s Lobby";
-                    Lobby5.Text = lobbies[4][1] + "'s Lobby";
-                    Lobby6.Text = lobbies[5][1] + "'s Lobby";
-                    Lobby7.Text = lobbies[6][1] + "'s Lobby";
-                    Lobby8.Text = lobbies[7][1] + "'s Lobby";
-                    Lobby9.Text = lobbies[8][1] + "'s Lobby";
-                    Lobby10.Text = lobbies[9][1] + "'s Lobby";
-                    Lobby1.Visibility = Visibility.Visible;
-                    Lobby2.Visibility = Visibility.Visible;
-                    Lobby3.Visibility = Visibility.Visible;
-                    Lobby4.Visibility = Visibility.Visible;
-                    Lobby5.Visibility = Visibility.Visible;
-                    Lobby6.Visibility = Visibility.Visible;
-                    Lobby7.Visibility = Visibility.Visible;
-                    Lobby8.Visibility = Visibility.Visible;
-                    Lobby9.Visibility = Visibility.Visible;
-                    Lobby10.Visibility = Visibility.Visible;
-                    break;
+                for (int i = 0; i < 10; i++)
+                {
+                    String lobbyReference = "Lobby" + (i+1);
+                    foreach (Button button in ListingContainer.Children)
+                    {
+                        TextBlock textBlock = (TextBlock)button.Content;
+                        if (textBlock.Name == lobbyReference)
+                        {
+                            if (i < lobbyCount)
+                            {
+                                textBlock.Text = lobbies[i][1] + "'s Lobby";
+                                textBlock.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                textBlock.Visibility = Visibility.Hidden;
+                            }
+                        }
+
+                    }
+                }
             }
+            catch { Trace.WriteLine("Lobby listing exception"); }
         }
 
         private void BtnRefresh(object sender, RoutedEventArgs x)
