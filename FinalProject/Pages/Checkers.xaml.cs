@@ -453,7 +453,7 @@ namespace FinalProject.Pages
         }
 
         //Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
-        private async void Select(String grid)
+        private void Select(String grid)
         {
             if (online && yourTurn)
             {
