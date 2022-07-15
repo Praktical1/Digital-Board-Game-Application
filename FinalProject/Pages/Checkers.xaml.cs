@@ -166,7 +166,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for a new turn
+        // Responsible for a new turn
         private void Turn(String side)
         {
             if (side == "R")
@@ -208,7 +208,7 @@ namespace FinalProject.Pages
             { ClearButtons(); }
         }
 
-        //Responsible for Pawn movement
+        // Responsible for Pawn movement
         private void Pawn(String grid)
         {
             //change grid to index on board array
@@ -325,7 +325,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for King movement
+        // Responsible for King movement
         private void King(String grid)
         {
             //Change grid to index on board array
@@ -452,7 +452,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
+        // Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
         private async void Select(String grid)
         {
             if (online && yourTurn)
@@ -1069,6 +1069,8 @@ namespace FinalProject.Pages
             }
         }
 
+        // Listeners
+        //
         // For starting ping service (online multiplayer only)
         private void BtnPingService(object sender, RoutedEventArgs x)
         {
@@ -1076,7 +1078,7 @@ namespace FinalProject.Pages
             PingService();
         }
 
-        // For returning to Menu
+        // For returning to Menu (auto surrenders if online)
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {
             if (online)
