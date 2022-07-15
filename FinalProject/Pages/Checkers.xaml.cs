@@ -455,7 +455,7 @@ namespace FinalProject.Pages
                     SqlCommand command = new SqlCommand(sql, connect);
                     command.ExecuteNonQuery();
                     connect.Close();
-                } catch { Trace.WriteLine("Failed to send move"); }
+                } catch { MessageBox.Show("Failed to send move"); }
                 timeOut++;
             }
             string[] temp = Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())];
@@ -907,7 +907,7 @@ namespace FinalProject.Pages
                         }
                         connect.Close();
                     }
-                    catch { Trace.WriteLine("Failed to obtain database data"); try { connect.Close(); } catch { }; }
+                    catch { MessageBox.Show("Failed to obtain database data"); try { connect.Close(); } catch { }; }
                 }
                 await Task.Delay(1000);
             }
