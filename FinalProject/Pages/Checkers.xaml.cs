@@ -33,7 +33,13 @@ namespace FinalProject.Pages
         private Boolean endJump = false;
         private int surrenderCounter = 0;
         private int player = 0;
-        private int timeOut; //to be used as part of timeout if implemented
+        private int opponent = 0;
+        private int counter = 0;
+        int surrenderTimer = 20; 
+        int opponentSurrenderTimer = 20;
+        private Boolean ping = true;
+        private List<String> restoreSelects = new List<string>();
+        private Boolean restoreCheck = false;
 
         //Multi-dimensional jagged array to hold information of all checker pieces
         String[,][] Board = new String[8, 8][] {
@@ -58,6 +64,14 @@ namespace FinalProject.Pages
             this.online = true;
             this.lobbyId = lobbyId;
             this.player = player;
+            if (player == 1)
+            {
+                opponent = 2;
+            }
+            else
+            {
+                opponent = 1;
+            }
             InitializeComponent();
             GetConnect();
             StartPing.Visibility = Visibility.Visible;
@@ -76,6 +90,11 @@ namespace FinalProject.Pages
                 RedWon.Content = "You've Lost (Red wins)";
                 BlackWon.Content = "You've Won (Black wins)";
             }
+            connect.Open();
+            String sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = '0' WHERE ID=1", lobbyId);
+            SqlCommand command = new SqlCommand(sql, connect);
+            command.ExecuteNonQuery();
+            connect.Close();
             Turn("B");
         }
         public Checkers(Settings setting)
@@ -184,8 +203,7 @@ namespace FinalProject.Pages
             if (!jump)
             { ForcedMove(side); }
 
-            //online side switch
-            timeOut = 0;
+            //online clear when not your turn
             if (!yourTurn && online)
             { ClearButtons(); }
         }
@@ -448,15 +466,15 @@ namespace FinalProject.Pages
                 {
                     opponent = 1;
                 }
+                string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{2}')", lobbyId, player, grid);
+                SqlCommand command = new SqlCommand(sql, connect);
                 try
                 {
-                    if (connect.State != ConnectionState.Open) { connect.Open(); }
-                    string sql = String.Format("Insert [dbo].[{0}] ([ID], [Player{1}]) VALUES (3, '{2}')", lobbyId, player, grid);
-                    SqlCommand command = new SqlCommand(sql, connect);
+                    if (connect.State == ConnectionState.Open) { connect.Close(); }
+                    connect.Open();
                     command.ExecuteNonQuery();
                     connect.Close();
-                } catch { MessageBox.Show("Failed to send move"); }
-                timeOut++;
+                } catch { MessageBox.Show("Failed to send move - move will be sent when connection is restored"); restoreSelects.Add(sql); }
             }
             string[] temp = Board[Int32.Parse(grid[1].ToString()) - 1, StringToNum(grid[0].ToString())];
             Trace.WriteLine(StringToNum(grid[0].ToString()) + ", " + (Int32.Parse(grid[1].ToString()) - 1));
@@ -851,64 +869,202 @@ namespace FinalProject.Pages
             connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
         }
 
+        private async void Restore()
+        {
+            restoreCheck = true;
+            surrenderTimer = 20;
+            while (restoreSelects.Count > 0)
+            {
+                try
+                {
+
+                    SqlCommand command = new SqlCommand(restoreSelects[0], connect);
+                    if (connect.State == ConnectionState.Open) { connect.Close(); }
+                    connect.Open();
+                    command.ExecuteNonQuery();
+                    connect.Close();
+                    restoreSelects.RemoveAt(0);
+                } catch { 
+                    Trace.WriteLine("Failed to reconnect");
+                    surrenderTimer--;
+                    await Task.Delay(1000);
+                }
+            }
+            restoreCheck = false;
+        }
+
+        private void Timeout()
+        {
+            String sql;
+            SqlCommand command;
+            SqlDataReader dataReader;
+            try
+            {
+                if (player == 1 && counter == 0)
+                {
+                    counter = 1;
+                }
+
+                if (connect.State == ConnectionState.Open) { connect.Close(); }
+                connect.Open();
+                sql = String.Format("Select Player1 from [dbo].[{0}] where ID=1", lobbyId);
+                command = new SqlCommand(sql, connect);
+                dataReader = command.ExecuteReader();
+                string choice = "";
+                while (dataReader.Read())
+                {
+                    if (dataReader.GetValue(0).ToString() != "")
+                    {
+                        choice= dataReader.GetValue(0).ToString();
+                    }
+                }
+                connect.Close();
+                if (choice == "Surrender")
+                {
+                    opponentSurrenderTimer = 0;
+                }
+                else
+                {
+                    int counterCheck = Int32.Parse(choice);
+                    if (counterCheck > counter)
+                    {
+                        opponentSurrenderTimer = 20;
+                        counter+=2;
+                        ping = true;
+                    }
+                    else
+                    {
+                        opponentSurrenderTimer--;
+                    }
+                }
+
+                if (counter > 0 && ping)
+                {
+                    if (connect.State == ConnectionState.Open) { connect.Close(); }
+                    connect.Open();
+                    sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = '{1}' WHERE ID=1", lobbyId, counter.ToString());
+                    command = new SqlCommand(sql, connect);
+                    command.ExecuteNonQuery();
+                    connect.Close();
+                    ping = false;
+                }
+            }
+            catch { MessageBox.Show("Failed to connect to server"); surrenderTimer--; }
+        }
+
+        private async void PullMoves()
+        {
+            try
+            {
+                if (connect.State == ConnectionState.Open) { connect.Close(); }
+                connect.Open();
+                String sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
+                SqlCommand command = new SqlCommand(sql, connect);
+                SqlDataReader dataReader = command.ExecuteReader();
+                List<string> choice = new List<string>();
+                while (dataReader.Read())
+                {
+                    if (dataReader.GetValue(0).ToString() != "")
+                    {
+                        choice.Add(dataReader.GetValue(0).ToString());
+                    }
+                }
+                choice.Add("STOP");
+                connect.Close();
+                connect.Open();
+                if (choice[0] != "STOP")
+                {
+                    try
+                    {
+                        Trace.WriteLine("deleting old entry");
+                        sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
+                        command = new SqlCommand(sql, connect);
+                        command.ExecuteNonQuery();
+                        for (int i = 0; i < (choice.Count - 1); i++)
+                        {
+                            Trace.WriteLine("Opponent moves to: " + choice[i]);
+                            Select(choice[i]);
+                            await Task.Delay(300);
+                        }
+                    }
+                    catch { MessageBox.Show("Failed to delete old moves - please remake lobby"); }
+                }
+                connect.Close();
+            }
+            catch { MessageBox.Show("Failed to obtain database data"); }
+        }
+
+        private void SurrenderCheck()
+        {
+            switch (surrenderTimer)
+            {
+                case 10:
+                    MessageBox.Show("Still unable to connect - 10 seconds till auto surrender");
+                    break;
+                case 5:
+                    MessageBox.Show("Still unable to connect - 5 seconds till auto surrender");
+                    break;
+                case 0:
+                    restoreSelects = new List<string>();
+                    online = false;
+                    if (player == 1)
+                    {
+                        EndScreen.Visibility = Visibility.Visible;
+                        RedWon.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        EndScreen.Visibility = Visibility.Visible;
+                        BlackWon.Visibility = Visibility.Visible;
+                    }
+                    break;
+            }
+            switch (opponentSurrenderTimer)
+            {
+                case 15:
+                    MessageBox.Show("Opponent connection lost - 15 seconds till they auto surrender");
+                    break;
+                case 10:
+                    MessageBox.Show("Opponent connection lost - 10 seconds till they auto surrender");
+                    break;
+                case 5:
+                    MessageBox.Show("Opponent connection lost - 5 seconds till they auto surrender");
+                    break;
+                case 0:
+                    restoreSelects = new List<string>();
+                    online = false;
+                    if (player == 2)
+                    {
+                        EndScreen.Visibility = Visibility.Visible;
+                        RedWon.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        EndScreen.Visibility = Visibility.Visible;
+                        BlackWon.Visibility = Visibility.Visible;
+                    }
+                    break;
+            }
+        }
         // Responsible for receiving moves of player
         private async void PingService()
         {
-            int timeoutCounter = 0;
             while (online)
             {
                 if (!yourTurn)
                 {
-                    SqlCommand command;
-                    SqlDataReader dataReader;
-                    String sql, Output = "";
-                    int opponent = 0;
-                    if (player == 1)
-                    {
-                        opponent = 2;
-                    }
-                    else
-                    {
-                        opponent = 1;
-                    }
-                    try
-                    {
-                        if (connect.State != ConnectionState.Open) { connect.Open(); }
-                        sql = String.Format("Select Player{0} from [dbo].[{1}] where ID=3", opponent, lobbyId);
-                        command = new SqlCommand(sql, connect);
-                        dataReader = command.ExecuteReader();
-                        List<string> choice = new List<string>();
-                        while (dataReader.Read())
-                        {
-                            if (dataReader.GetValue(0).ToString() != "")
-                            {
-                                choice.Add(dataReader.GetValue(0).ToString());
-                            }
-                        }
-                        choice.Add("STOP");
-                        connect.Close();
-                        if (connect.State != ConnectionState.Open) { connect.Open(); }
-                        if (choice[0] != "STOP")
-                        {
-                            try
-                            {
-                                Trace.WriteLine("deleting old entry");
-                                sql = String.Format("DELETE FROM [dbo].[{0}] WHERE ID=3", lobbyId);
-                                command = new SqlCommand(sql, connect);
-                                command.ExecuteNonQuery();
-                                for (int i = 0; i < (choice.Count - 1); i++)
-                                {
-                                    Trace.WriteLine("Opponent moves to: " + choice[i]);
-                                    Select(choice[i]);
-                                    await Task.Delay(300);
-                                }
-                            }
-                            catch { Trace.WriteLine("Failed to delete old moves"); }
-                        }
-                        connect.Close();
-                    }
-                    catch { MessageBox.Show("Failed to obtain database data"); try { connect.Close(); } catch { }; }
+                    PullMoves();
                 }
+                if (!restoreCheck)
+                {
+                    if (restoreSelects.Count > 0)
+                    {
+                        Restore();
+                    }
+                    Timeout();
+                }
+                if (surrenderTimer < 16 || opponentSurrenderTimer < 16)
+                { SurrenderCheck(); }
                 await Task.Delay(1000);
             }
         }
@@ -923,7 +1079,15 @@ namespace FinalProject.Pages
         // For returning to Menu
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {
-            online = false;
+            if (online)
+            {
+                connect.Open();
+                String sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Surrender' WHERE ID=1", lobbyId);
+                SqlCommand command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
+                connect.Close();
+                online = false;
+            }
             NavigationService.Navigate(new MainMenu(setting));
         }
 
@@ -931,11 +1095,29 @@ namespace FinalProject.Pages
         private void BtnBlackSurrender(object sender, RoutedEventArgs x) {
             EndScreen.Visibility = Visibility.Visible;
             RedWon.Visibility = Visibility.Visible;
+            if (online)
+            {
+                connect.Open();
+                String sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Surrender' WHERE ID=1", lobbyId);
+                SqlCommand command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
+                connect.Close();
+                online = false;
+            }
         }
         private void BtnRedSurrender(object sender, RoutedEventArgs x)
         {
             EndScreen.Visibility = Visibility.Visible;
             BlackWon.Visibility = Visibility.Visible;
+            if (online)
+            {
+                connect.Open();
+                String sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Surrender' WHERE ID=1", lobbyId);
+                SqlCommand command = new SqlCommand(sql, connect);
+                command.ExecuteNonQuery();
+                connect.Close();
+                online= false;
+            }
         }
 
         // Listeners responsible for the buttons on the board
