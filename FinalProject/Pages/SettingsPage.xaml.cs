@@ -39,6 +39,8 @@ namespace FinalProject.Pages
             }
             Online.Content = "Online - Logged in as " + setting.userId;
         }
+
+        //Listeners for actions below
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {
             SaveSettings();

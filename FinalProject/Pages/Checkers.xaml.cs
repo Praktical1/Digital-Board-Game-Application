@@ -55,7 +55,7 @@ namespace FinalProject.Pages
         //Key (R = Red), (B = Black), (  = Empty)
         //Key (  = Empty), (1 = Pawn), (2 = King)
 
-        //Holds selected variable
+        //  Holds selected variable
         String[] selected = new string[3];
         
         public Checkers(Settings setting, String lobbyId, int player)
@@ -105,7 +105,7 @@ namespace FinalProject.Pages
         }
 
         
-        //Two conversion functions from index of array to board and vice versa for horizontal axis
+        //  Two conversion functions from index of array to board and vice versa for horizontal axis
         private string NumToString(int loopReference)
         {
             switch (loopReference)
@@ -166,7 +166,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for a new turn
+        //  Responsible for a new turn
         private void Turn(String side)
         {
             if (side == "R")
@@ -208,7 +208,7 @@ namespace FinalProject.Pages
             { ClearButtons(); }
         }
 
-        //Responsible for Pawn movement
+        //  Responsible for Pawn movement
         private void Pawn(String grid)
         {
             //change grid to index on board array
@@ -325,7 +325,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Responsible for King movement
+        //  Responsible for King movement
         private void King(String grid)
         {
             //Change grid to index on board array
@@ -452,7 +452,7 @@ namespace FinalProject.Pages
             }
         }
 
-        //Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
+        //  Function called when a listener is triggered, responsible for players actions - can be tweaked for online multiplayer and AI functionality
         private void Select(String grid)
         {
             if (online && yourTurn)
@@ -516,7 +516,7 @@ namespace FinalProject.Pages
         }
 
 
-        //Responsible for upgrading pawn to king when conditions met
+        //  Responsible for upgrading pawn to king when conditions met
         private void UpgradeToKing()
         {
             for (int i = 0; i < 8; i++)
@@ -555,7 +555,7 @@ namespace FinalProject.Pages
 
         }
 
-        //Responsible for checking if a player meets victory conditions
+        //  Responsible for checking if a player meets victory conditions
         private void Won()
         {
             int counterRed = 0;
@@ -869,6 +869,7 @@ namespace FinalProject.Pages
             connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
         }
 
+        //  Responsible for recovering from connection failure during your turn
         private async void Restore()
         {
             restoreCheck = true;
@@ -893,6 +894,7 @@ namespace FinalProject.Pages
             restoreCheck = false;
         }
 
+        //  Timeout feature that will ensure other player is still connected (and also yourself)
         private void Timeout()
         {
             String sql;
@@ -952,6 +954,7 @@ namespace FinalProject.Pages
             catch { MessageBox.Show("Failed to connect to server"); surrenderTimer--; }
         }
 
+        //  Function that pulls moves done by opponent from the SQL server
         private async void PullMoves()
         {
             try
@@ -994,6 +997,7 @@ namespace FinalProject.Pages
             catch { MessageBox.Show("Failed to obtain database data"); }
         }
 
+        //  Used in conjunction with Timeout to determine if the player is still connected giving appropiate messaages based on timer and finally forcing surrender of the one who lost connection
         private void SurrenderCheck()
         {
             switch (surrenderTimer)
@@ -1069,6 +1073,8 @@ namespace FinalProject.Pages
             }
         }
 
+        // Listeners
+        //
         // For starting ping service (online multiplayer only)
         private void BtnPingService(object sender, RoutedEventArgs x)
         {
@@ -1076,7 +1082,7 @@ namespace FinalProject.Pages
             PingService();
         }
 
-        // For returning to Menu
+        // For returning to Menu (auto surrenders if online)
         private void BtnMainMenu(object sender, RoutedEventArgs x)
         {
             if (online)

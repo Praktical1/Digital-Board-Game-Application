@@ -75,6 +75,7 @@ namespace FinalProject.Pages
             catch { Trace.WriteLine("Failed to initialise"); connect.Close(); }
         }
 
+        //Responsible for actions of other users to show on the host's screen + vice versa (with a little desync)
         public async void PingService()
         {
             ping = true;
@@ -161,6 +162,7 @@ namespace FinalProject.Pages
             }
         }
 
+        //Create connect variable which is responsible for connection to the SQL server
         public void GetConnect()
         {
             var builder = new ConfigurationBuilder()
@@ -172,6 +174,7 @@ namespace FinalProject.Pages
             connect = new SqlConnection(Configuration.GetConnectionString("SQLconnectionstring"));
         }
 
+        //Responsible for readying up and checking if other player is ready
         public async void PlayerReady()
         {
             SqlCommand command;
@@ -260,6 +263,7 @@ namespace FinalProject.Pages
             
         }
 
+        //Countdown timer for when both players are ready
         private void CountdownTimer(int count)
         {
             switch (count)
@@ -292,6 +296,7 @@ namespace FinalProject.Pages
             }
         }
 
+        //If the player leaves the lobby uses either of the two functions below (based on whether host or not)
         private void CloseLobby()
         {
             sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
@@ -330,6 +335,7 @@ namespace FinalProject.Pages
             catch { MessageBox.Show("Failed to relist this lobby"); }
         }
 
+        //Leads to two functions above
         public void Close()
         {
             if (player == 1)
