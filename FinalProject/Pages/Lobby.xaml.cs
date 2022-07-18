@@ -88,7 +88,7 @@ namespace FinalProject.Pages
                     SqlDataReader reader;
                     int opponent = 0;
                     String[] output = new string[2];
-
+                    if (connect.State == ConnectionState.Open) { connect.Close(); }
                     connect.Open();
                     if (player == 1)
                     {
@@ -145,7 +145,11 @@ namespace FinalProject.Pages
                             Player1.Background = Brushes.Green;
                         }
                     }
-                    else
+                    else if (output[1] == "Closing")
+                    {
+                        MessageBox.Show("Lobby has been closed");
+                        NavigationService.Navigate(new OnlineMultiplayer(setting));
+                    } else
                     {
                         otherReady = false;
                         if (player == 1)
@@ -186,7 +190,9 @@ namespace FinalProject.Pages
                     Ready.Background = Brushes.Red;
                     Player1.Background = Brushes.Red;
                     ready = false;
-                    try { 
+                    try 
+                    {
+                        if (connect.State == ConnectionState.Open) { connect.Close(); }
                         connect.Open();
                         sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'waiting' WHERE ID=2", lobbyId);
                         command = new SqlCommand(sql, connect);
@@ -204,6 +210,7 @@ namespace FinalProject.Pages
                     command =new SqlCommand(sql,connect);
                     try
                     {
+                        if (connect.State == ConnectionState.Open) { connect.Close(); }
                         connect.Open();
                         command.ExecuteNonQuery();
                         connect.Close();
@@ -228,6 +235,7 @@ namespace FinalProject.Pages
                     ready = false;
                     try
                     {
+                        if (connect.State == ConnectionState.Open) { connect.Close(); }
                         connect.Open();
                         string sql = String.Format("UPDATE [dbo].[{0}] SET Player2 = 'waiting' WHERE ID=2", lobbyId);
                         command = new SqlCommand(sql, connect);
@@ -245,11 +253,18 @@ namespace FinalProject.Pages
                     command = new SqlCommand(sql, connect);
                     try
                     {
+                        if (connect.State == ConnectionState.Open) { connect.Close(); }
                         connect.Open();
                         command.ExecuteNonQuery();
                         connect.Close();
                     }
-                    catch { Trace.WriteLine("Failed to ready up"); connect.Close(); }
+                    catch
+                    {
+                        MessageBox.Show("Unable to ready up, Lobby may have been closed, Returning to listing");
+                        NavigationService.Navigate(new OnlineMultiplayer(setting));
+                        Trace.WriteLine("Failed to ready up");
+                        connect.Close();
+                    }
                     while (ready)
                     {
                         if (otherReady)
@@ -291,19 +306,30 @@ namespace FinalProject.Pages
                     ping = false;
                     break;
                 default:
-                    NavigationService.Navigate(new Checkers(setting, lobbyId, player));
+                    NavigationService.Navigate(new CheckersRedesigned(setting, lobbyId, player));
                     ready = false;
                     break;
             }
         }
 
         // If the player leaves the lobby uses either of the two functions below (based on whether host or not)
-        private void CloseLobby()
+        private async void CloseLobby()
         {
-            sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
+            sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Ready' WHERE ID=2", lobbyId);
             SqlCommand command = new SqlCommand(sql, connect);
             try
             {
+                if (connect.State == ConnectionState.Open) { connect.Close(); }
+                connect.Open();
+                command.ExecuteNonQuery();
+                connect.Close();
+            } catch { }
+            await Task.Delay(1000);
+            sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
+            command = new SqlCommand(sql, connect);
+            try
+            {
+                if (connect.State == ConnectionState.Open) { connect.Close(); }
                 connect.Open();
                 command.ExecuteNonQuery();
                 Trace.WriteLine("deleted listing");
@@ -319,7 +345,8 @@ namespace FinalProject.Pages
         private void LeaveLobby()
         {
             try 
-            { 
+            {
+                if (connect.State == ConnectionState.Open) { connect.Close(); }
                 connect.Open();
                 sql = String.Format("INSERT [dbo].[lobbies] ([Lobby],[Host]) VALUES ('{0}','{1}')", lobbyId, hostName);
                 SqlCommand command = new SqlCommand(sql, connect);
