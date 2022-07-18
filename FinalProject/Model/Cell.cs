@@ -8,10 +8,6 @@ namespace FinalProjectRedesigned.Model
 {
     internal class Cell
     {
-        public int[] coords { get; set; }
-
-        public int col { get; set; }
-        public int row { get; set; }
         public String colour { get; set; }
         public String type { get; set; }
 
@@ -20,12 +16,9 @@ namespace FinalProjectRedesigned.Model
 
         public Boolean Occupied { get; set; }
 
-        public Cell(int col, int row, string colour, string type)
+        public Cell(string colour, string type)
         {
-            this.col = col;
-            this.row = row;
             holds = new string[2] { colour, type };
-            Console.WriteLine("Created a cell");
         }
 
         public void SetHolds(String[] x)

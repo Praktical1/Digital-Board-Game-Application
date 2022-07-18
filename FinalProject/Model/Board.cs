@@ -28,20 +28,20 @@ namespace FinalProjectRedesigned.Model
                     {
                         if (i < 3)
                         {
-                            grid[i, j] = new Cell(i, j, "R", "1");
+                            grid[i, j] = new Cell("R", "1");
                         }
                         else if (i > 4)
                         {
-                            grid[i, j] = new Cell(i, j, "B", "1");
+                            grid[i, j] = new Cell("B", "1");
                         }
                         else
                         {
-                            grid[i, j] = new Cell(i, j, " ", " ");
+                            grid[i, j] = new Cell(" ", " ");
                         }
                     }
                     else
                     {
-                        grid[i, j] = new Cell(i, j, " ", " ");
+                        grid[i, j] = new Cell(" ", " ");
                     }
                 }
             }

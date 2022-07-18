@@ -315,7 +315,7 @@ namespace FinalProject.Pages
         // If the player leaves the lobby uses either of the two functions below (based on whether host or not)
         private async void CloseLobby()
         {
-            sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Ready' WHERE ID=2", lobbyId);
+            sql = String.Format("UPDATE [dbo].[{0}] SET Player1 = 'Closing' WHERE ID=2", lobbyId);
             SqlCommand command = new SqlCommand(sql, connect);
             try
             {
@@ -340,7 +340,6 @@ namespace FinalProject.Pages
                 connect.Close();
             }
             catch { MessageBox.Show("Failed to remove lobby from listing and deleting lobby table"); }
-            NavigationService.Navigate(new OnlineMultiplayer(setting));
         }
         private void LeaveLobby()
         {
@@ -358,7 +357,6 @@ namespace FinalProject.Pages
                 command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
                 connect.Close();
-                NavigationService.Navigate(new OnlineMultiplayer(setting));
             }
             catch { MessageBox.Show("Failed to relist this lobby"); }
         }
@@ -374,6 +372,7 @@ namespace FinalProject.Pages
                 LeaveLobby();
             }
             ping = false;
+            NavigationService.Navigate(new OnlineMultiplayer(setting));
         }
 
         // For starting ping service
