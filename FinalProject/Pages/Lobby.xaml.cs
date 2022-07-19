@@ -322,9 +322,9 @@ namespace FinalProject.Pages
                 if (connect.State == ConnectionState.Open) { connect.Close(); }
                 connect.Open();
                 command.ExecuteNonQuery();
+                Trace.WriteLine("Closing Lobby (notifying other player)");
                 connect.Close();
             } catch { }
-            await Task.Delay(1000);
             sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
             command = new SqlCommand(sql, connect);
             try
@@ -332,11 +332,12 @@ namespace FinalProject.Pages
                 if (connect.State == ConnectionState.Open) { connect.Close(); }
                 connect.Open();
                 command.ExecuteNonQuery();
-                Trace.WriteLine("deleted listing");
+                Trace.WriteLine("Deleted listing");
+                await Task.Delay(1000);
                 sql = "DROP TABLE [dbo].[" + lobbyId + "]";
                 command = new SqlCommand(sql, connect);
                 command.ExecuteNonQuery();
-                Trace.WriteLine("deleted table");
+                Trace.WriteLine("Deleted lobby");
                 connect.Close();
             }
             catch { MessageBox.Show("Failed to remove lobby from listing and deleting lobby table"); }

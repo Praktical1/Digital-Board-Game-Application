@@ -28,7 +28,6 @@ namespace FinalProject.Pages
             InitializeComponent();
             this.setting = setting;
             Trace.WriteLine(setting.background);
-            Trace.WriteLine(setting.style);
             Trace.WriteLine(setting.userId);
             if (setting.gameType == "Checkers")
             {
