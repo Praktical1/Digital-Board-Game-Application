@@ -95,16 +95,31 @@ namespace FinalProject.Pages
         {
             string lobbyId = lobbies[lobby][0];
             string hostName = lobbies[lobby][1];
-            SqlCommand command;
-            String sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
-            command = new SqlCommand(sql, connect);
-            try
+            RefreshLobbies();
+            Boolean lobbyFound = false;
+            for (int i = 0; i < lobbies.Count; i++)
             {
-                connect.Open();
-                command.ExecuteNonQuery();
-                connect.Close();
-            } catch { Trace.WriteLine("Failed to delete lobby on entering"); }
-            NavigationService.Navigate(new Lobby(setting, lobbyId, hostName));
+                if (lobbies[i][0] == lobbyId)
+                {
+                    lobbyFound = true;
+                    SqlCommand command;
+                    String sql = String.Format("DELETE FROM [dbo].[lobbies] WHERE CONVERT(VARCHAR, Lobby)='{0}'", lobbyId);
+                    command = new SqlCommand(sql, connect);
+                    try
+                    {
+                        connect.Open();
+                        command.ExecuteNonQuery();
+                        connect.Close();
+                    }
+                    catch { Trace.WriteLine("Failed to delete lobby on entering"); }
+                    NavigationService.Navigate(new Lobby(setting, lobbyId, hostName));
+                }
+            }
+            if (!lobbyFound)
+            {
+                MessageBox.Show("Lobby either full or closed");
+            }
+            
         }
 
         private void ListVisualUpdate(int lobbyCount)
